@@ -1,0 +1,52 @@
+### Element
+## daten *
+# data *
+# attr *
+
+## Query support
+# selector *
+# is *
+# find *
+# closest *
+# closestRecursive *momentan nicht notwendig
+# parent *
+# parents *
+
+## Content manipulation
+# after *nativ
+# before *nativ
+# empty
+# remove *nativ
+
+## Class manipulation
+# addClass *
+# removeClass *
+# toggleClass *
+
+
+### NodeList
+## Query support
+# find 
+# closest 
+# closestRecursive 
+
+## dom manipulation 
+# after
+# before
+# empty
+# remove
+
+## filter
+# first *
+# last *
+# filter  
+# indexOf *
+
+
+### EventTarget
+## event support
+# eventHandler
+# on
+# one
+# trigger
+

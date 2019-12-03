@@ -1,0 +1,47 @@
+{
+  "name": "dom-api-extension",
+  "version": "1.0.4-beta1",
+  "description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
+  "main": "js/index.js",
+  "scripts": {
+    "build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
+    "dev-server": "webpack-dev-server --open --config webpack.dev-server.js",
+    "karma:live": "karma start karma.live-dev.js",
+    "karma:integration": "karma start karma.integration.js",
+    "test": "npm run karma:integration"
+  },
+  "keywords": [],
+  "author": "Frank Schüler",
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine": "^3.4.0",
+    "jasmine-core": "^3.4.0",
+    "karma": "^4.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-html2js-preprocessor": "^1.1.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^3.0.5",
+    "puppeteer": "^1.15.0",
+    "replace-in-file-webpack-plugin": "^1.0.6",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.3.1",
+    "webpack-merge": "^4.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TwilightTitus/dom-api-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TwilightTitus/dom-api-extension/issues"
+  },
+  "homepage": "https://github.com/TwilightTitus/dom-api-extension#readme",
+  "directories": {
+    "src": "src",
+    "test": "test"
+  }
+}
