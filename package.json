@@ -1,6 +1,6 @@
 {
-  "name": "dom-api-extension",
-  "version": "1.0.4-beta1",
+  "name": "defaultjs-extdom",
+  "version": "1.0.0-beta.1",
   "description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
   "main": "js/index.js",
   "scripts": {
@@ -34,12 +34,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwilightTitus/dom-api-extension.git"
+    "url": "git+https://github.com/default-js/extdom.git"
   },
   "bugs": {
-    "url": "https://github.com/TwilightTitus/dom-api-extension/issues"
+    "url": "https://github.com/default-js/extdom/issues"
   },
-  "homepage": "https://github.com/TwilightTitus/dom-api-extension#readme",
+  "homepage": "https://github.com/default-js/extdom#readme",
   "directories": {
     "src": "src",
     "test": "test"
