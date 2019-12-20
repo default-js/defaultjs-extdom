@@ -1,0 +1,11 @@
+import "./dom/EventTarget";
+import "./dom/Node";
+import "./dom/Element";
+import "./dom/Document";
+import "./dom/DocumentFragment";
+import "./dom/HTMLElement";
+import "./dom/HTMLInputElement";
+import "./dom/HTMLTextAreaElement";
+import "./dom/HTMLSelectElement";
+import "./dom/NodeList";
+import "./Global";
