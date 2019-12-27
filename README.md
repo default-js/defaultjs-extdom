@@ -27,7 +27,7 @@ If you use an older browser, you need to load polyfills first. like from <a href
 ### Nodejs/NPM
 
 ````
-npm install defaultjs-extdom
+npm install @default-js/defaultjs-extdom
 
 ````
 
