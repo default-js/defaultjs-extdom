@@ -63,6 +63,19 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 			else if(typeof arg === "string")
 				arg.forEach(insert);
 		}
-	};	
+	};
+	
+	Prototype.replace = function(aOldNode, aNewNode){
+		const parent = aOldNode.parent();
+		
+		if(aNewNode instanceof Array || aNewNode instanceof NodeList){
+			aNewNode.forEach(function(aItem){
+				parent.insertBefore(aItem, aOldNode);
+			});
+			aOldNode.remove();
+		}
+		else
+			parent.replaceChild(aOldNode, aNewNode);
+	}
 });
 export default support;
