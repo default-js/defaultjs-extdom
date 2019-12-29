@@ -65,17 +65,22 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 		}
 	};
 	
-	Prototype.replace = function(aOldNode, aNewNode){
-		const parent = aOldNode.parent();
+	Prototype.replace = function(){
+		if(arguments.length < 1)
+			throw new Error("Insufficient arguments! One or two nodes required!");
 		
-		if(aNewNode instanceof Array || aNewNode instanceof NodeList){
-			aNewNode.forEach(function(aItem){
-				parent.insertBefore(aItem, aOldNode);
+		const parent = arguments.length == 1 ? this.parentNode : this;
+		const oldNode = arguments.length == 1 ? this : arguments[0];
+		const newNode = arguments.length == 1 ? arguments[0] : arguments[1];
+		
+		if(newNode instanceof Array || newNode instanceof NodeList){
+			newNode.forEach(function(aItem){
+				parent.insertBefore(aItem, oldNode);
 			});
-			aOldNode.remove();
+			oldNode.remove();
 		}
 		else
-			parent.replaceChild(aOldNode, aNewNode);
+			parent.replaceChild(oldNode, newNode);
 	}
 });
 export default support;
