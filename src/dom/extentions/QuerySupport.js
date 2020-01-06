@@ -90,7 +90,7 @@ const support = Extender("QuerySupport",function(Prototype) {
 	};	
 
 	Prototype.selector = function(){
-		if(this instanceof Document)
+		if(this instanceof Document || this instanceof DocumentFragment)
 			return undefined;
 		else if(this.id)
 			return "#" + this.id;
