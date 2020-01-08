@@ -8,4 +8,5 @@ import "./dom/HTMLInputElement";
 import "./dom/HTMLTextAreaElement";
 import "./dom/HTMLSelectElement";
 import "./dom/NodeList";
+import "./dom/HtmlCollection";
 import "./Global";

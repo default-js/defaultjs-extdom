@@ -16,7 +16,7 @@ module.exports = merge(common, {
         quiet : true
     },
     output : {
-	    filename : project.name + '.js',
+	    filename : project.buildName + '.js',
         path : path.resolve(__dirname, 'dist')
     },
     plugins : [ new webpack.HotModuleReplacementPlugin() ]  

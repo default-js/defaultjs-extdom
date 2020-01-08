@@ -2,9 +2,9 @@ import extendPrototype from "../utils/ExtendPrototype";
 import DelegaterBuilder from "../utils/DelegaterBuilder";
 import ListSupport from "./extentions/ListSupport";
 
-extendPrototype(NodeList, ListSupport);
+extendPrototype(HTMLCollection, ListSupport);
 
-NodeList.prototype.applyTo = function(){
+HTMLCollection.prototype.applyTo = function(){
 	let args = Array.from(arguments);
 	let calling = args.shift();
 	let isFunction = typeof calling === "function";
@@ -24,7 +24,7 @@ NodeList.prototype.applyTo = function(){
 	return results;
 };
 
-NodeList.prototype.val = function() {
+HTMLCollection.prototype.val = function() {
 	if(arguments.length == 0){
 		if(this.length > 0){
 			let result = new Map();
@@ -39,10 +39,10 @@ NodeList.prototype.val = function() {
 		}
 	}
 	else
-		NodeList.prototype.applyTo.apply(this, ["val"].concat(Array.from(arguments)));
+		HTMLCollection.prototype.applyTo.apply(this, ["val"].concat(Array.from(arguments)));
 };
 
-NodeList.from = function(){
+HTMLCollection.from = function(){
 	let args = Array.from(arguments);
 	let data = {};
 	let counter = 0;
@@ -50,11 +50,11 @@ NodeList.from = function(){
 	while(args.length > 0){
 		let arg = args.shift();
 		if(typeof arg !== "undefined" && arg != null){
-			if(arg instanceof Node)
+			if(arg instanceof HTMLElement)
 				data[counter++] = {value: arg, enumerable: true};
-			else if(arg instanceof NodeList || arg instanceof HTMLCollection || arg instanceof Array){
+			else if(arg instanceof HTMLCollection || arg instanceof NodeList || arg instanceof Array){
 				for(let i = 0; i < arg.length; i++){
-					if(arg[i] && arg[i] instanceof Node){
+					if(arg[i] && arg[i] instanceof HTMLElement){
 						data[counter++] = {value: arg[i], enumerable: true};
 					}
 				}
@@ -63,7 +63,7 @@ NodeList.from = function(){
 	}
 	
 	data.length = {value: counter};
-	return  Object.create(NodeList.prototype, data);
+	return  Object.create(HTMLCollection.prototype, data);
 };
 
 
@@ -73,7 +73,7 @@ DelegaterBuilder(function(aFunctionName, theArguments){
 		if(node && typeof node[aFunctionName] === "function"){
 			let result = node[aFunctionName].apply(node, theArguments);
 			if(result){ 
-				if(result instanceof NodeList)
+				if(result instanceof HTMLCollection)
 					results = results.concat(Array.from(result));
 				else
 					results.push(result);
@@ -83,8 +83,8 @@ DelegaterBuilder(function(aFunctionName, theArguments){
 	
 	if(results.length === 0)
 		return undefined;
-	else if(results[0] instanceof Node || results[0] instanceof NodeList)
-		return NodeList.from.apply(null, results);
+	else if(results[0] instanceof HTMLElement || results[0] instanceof HTMLCollection)
+		return HTMLCollection.from.apply(null, results);
 	else
 		return results;
-},NodeList.prototype, Node.prototype, HTMLElement.prototype, HTMLInputElement.prototype, Element.prototype, EventTarget.prototype);
+},HTMLCollection.prototype, Node.prototype, HTMLElement.prototype, HTMLInputElement.prototype, Element.prototype, EventTarget.prototype);
