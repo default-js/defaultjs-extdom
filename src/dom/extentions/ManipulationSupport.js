@@ -73,14 +73,14 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 		const oldNode = arguments.length == 1 ? this : arguments[0];
 		const newNode = arguments.length == 1 ? arguments[0] : arguments[1];
 		
-		if(newNode instanceof Array || newNode instanceof NodeList){
+		if(newNode instanceof Array || newNode instanceof NodeList || newNode instanceof HTMLCollection){
 			newNode.forEach(function(aItem){
 				parent.insertBefore(aItem, oldNode);
 			});
 			oldNode.remove();
 		}
 		else
-			parent.replaceChild(oldNode, newNode);
+			parent.replaceChild(newNode,oldNode);
 	}
 });
 export default support;
