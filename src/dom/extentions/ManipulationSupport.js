@@ -35,33 +35,38 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 		return this;
 	};
 	
-	Prototype.append = function(){
-		let append = Prototype.appendChild.bind(this);
+	const append = function(){
+		const append = Prototype.appendChild.bind(this);
 		for(let i = 0; i < arguments.length; i++){
 			let arg = arguments[i];
 			if(arg instanceof Node)
 				this.appendChild(arg);
 			else if(typeof arg === "string")
 				create(arg).forEach(append);
-			else if(Array.isArray(arg) || arg instanceof NodeList)
+			else if(typeof arg.forEach === "function")
 				arg.forEach(append);
 		}
-	};
+	};	
+	Prototype.append = append;
 	
 	const prepend = function(aFirstElement, aElement){
 		this.insertBefore(aElement, aFirstElement);
 	};
 	Prototype.prepend = function(){
-		let first = this.childNodes.first();
-		let insert = prepend.bind(this, first);
-		for(let i = 0; i < arguments.length; i++){
-			let arg = arguments[i];
-			if(Array.isArray(arg) || arg instanceof NodeList)
-				arg.forEach(insert);
-			else if(arg instanceof Node)
-				this.insertBefore(arg, first);
-			else if(typeof arg === "string")
-				arg.forEach(insert);
+		if(this.childNodes.length == 0)
+			append.apply(this, arguments);
+		else {
+			const first = this.childNodes.first();
+			const insert = prepend.bind(this, first);
+			for(let i = 0; i < arguments.length; i++){
+				const arg = arguments[i];
+				if(arg instanceof Node)
+					insert(arg);
+				else if(typeof arg === "string")
+					arg.forEach(insert);
+				else if(typeof arg.forEach === "function")
+					arg.forEach(insert);
+			}
 		}
 	};
 	

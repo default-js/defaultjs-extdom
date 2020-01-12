@@ -5,32 +5,39 @@ describe("ManipulationSupportTest Prepend", function() {
 		done();
 	});
 	
-
-	it("simple element", function(done){
-		let id = Utils.domId();
-		let content = window.create("<div id=\"" + id + "\">test-3</div>");
-		let element = content.first();		
-		document.body.prepend(content);
-		let result = find("#" + id).first();
-		expect(element).toBeDefined();
-		expect(element).toBe(result);
-		expect(document.body.childNodes[0]).toBe(result);
-		element.remove();
-		done();
+	it("prepend into empty container", function(){
+		const container = window.create("<div id=\"" + Utils.domId() + "\"></div>").first();
+		const element = window.create("<div id=\"" + Utils.domId() + "\"></div>").first();		
+		container.prepend(element);
+		
+		expect(container.content().length).toBe(1);
+		expect(container.content().first()).toBeDefined();
+		expect(container.content().first()).toBe(element);
+		container.remove();
 	});
 	
-	it("complex element", function(done){
+	
+	it("prepend into filled container", function(){
+		let container = window.create("<div id=\"" + Utils.domId() + "\"><div></div></div>").first();
+		let element = window.create("<div id=\"" + Utils.domId() + "\"></div>").first();
+		container.prepend(element);
+		
+		expect(container.content().length).toBe(2);
+		expect(container.content().first()).toBeDefined();
+		expect(container.content().first()).toBe(element);		
+		container.remove();
+	});
+	
+	it("complex element", function(){
 		let id = Utils.domId();
-		let content = window.create("<div id=\"" + id + "\">test-4<div>test-4-1</div></div>");
-		let element = content.first();
-		document.body.prepend(content);
-		let result = find("#" + id).first();
-		expect(element).toBeDefined();
-		expect(element).toBe(result);
-		expect(result.childNodes.length).toBe(2);
-		expect(document.body.childNodes[0]).toBe(result);
-		element.remove();
-		done();
+		let container = window.create("<div id=\"" + Utils.domId() + "\"><div></div></div>").first();
+		let element = window.create("<div id=\"" + Utils.domId() + "\">test-4<div>test-4-1</div></div>").first();
+		container.prepend(element);
+		
+		expect(container.content().length).toBe(2);
+		expect(container.content().first()).toBeDefined();
+		expect(container.content().first()).toBe(element);		
+		container.remove();
 	});
 	
 	afterAll(function(done){

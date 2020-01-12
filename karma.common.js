@@ -1,6 +1,4 @@
 const path = require('path');
-const merge = require('webpack-merge');
-const webpackCommon = require('./webpack.common.js');
 
 module.exports = {
 	// base path that will be used to resolve all patterns (eg. files,
@@ -20,10 +18,6 @@ module.exports = {
 		"test/*.js" : [ "webpack", "sourcemap"],
 		"test/sites/**/*.html" : [ "html2js" ]
 	},
-	webpack :  merge(webpackCommon, {
-		mode : "development",
-		devtool : "inline-source-map"
-	}),
 	// test results reporter to use
 	// possible values: "dots", "progress"
 	// available reporters: https://npmjs.org/browse/keyword/karma-reporter
