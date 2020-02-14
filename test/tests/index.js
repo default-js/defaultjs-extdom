@@ -5,3 +5,4 @@ import "../index";
 import "./utils";
 import "./dom";
 import "./GlobalTest";
+import "./complex-tests";

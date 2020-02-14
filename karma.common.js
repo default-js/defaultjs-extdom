@@ -8,7 +8,17 @@ module.exports = {
 	// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
 	frameworks : [ "jasmine" ],
 	// list of files / patterns to load in the browser
-	files : ["src/**/*.js", "test/index.js", "test/sites/**/*.html" ],
+	files : [
+		"src/**/*.js", 
+		"test/index.js", 
+		"test/sites/**/*.html",
+		{pattern: "test/data/**/*", included: false, served: true, watched: false, nocache: false},
+		{pattern: "test/static/**/*", included: false, served: true, watched: true, nocache: false}	
+	],
+	proxies: {
+		"/data/": "/base/test/data/",
+		"/static/": "/base/test/static/"
+	},
 	// list of files / patterns to exclude
 	exclude : [],
 	// available preprocessors:

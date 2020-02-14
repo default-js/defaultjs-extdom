@@ -7,7 +7,7 @@
   "scripts": {
     "build:only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
     "build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
-    "dev-server": "webpack-dev-server --open --config webpack.dev-server.js",
+    "dev:live": "webpack-dev-server --open --config webpack.dev-server.js",
     "karma:live": "karma start karma.live-dev.js",
     "karma:integration": "karma start karma.integration.js",
     "test": "npm run karma:integration"
@@ -27,11 +27,11 @@
     "karma-safari-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^2.1.1",
     "replace-in-file-webpack-plugin": "^1.0.6",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
   },
   "repository": {

@@ -21,10 +21,10 @@ Utils.global.ready = function() {
 Utils.global.create = function(aContent, aContentType) {
 	if (typeof arguments[0] !== "string")
 		throw new Error("The first argument must be a string!");
-
-	let parsed = parser.parseFromString(arguments[0].trim(), arguments[1] || "text/html");
-	let nodes = parsed.body.childNodes;
-	let frag = document.createDocumentFragment();
-	frag.append(nodes);
+	
+	const parsed = parser.parseFromString(arguments[0].trim(), arguments[1] || "text/html");
+	const frag = document.createDocumentFragment();
+	frag.append(parsed.head.childNodes);
+	frag.append(parsed.body.childNodes);
 	return frag.childNodes;
 };
