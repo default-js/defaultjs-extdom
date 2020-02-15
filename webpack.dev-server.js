@@ -7,6 +7,7 @@ const project = require("./package.json");
 module.exports = merge(common, {
     mode : 'development',
     optimization : {
+    	minimize : false,
 	    usedExports : true
     },
     devtool : 'inline-source-map',

@@ -49,6 +49,7 @@ describe("GlobalTest Create", function() {
 			return Promise.all(actions);
 		})
 		.then((result) => {
+			debugger;
 			if(!errorJquery && !errorNativ && result[0] && result[1])
 				return Promise.resolve();
 			
