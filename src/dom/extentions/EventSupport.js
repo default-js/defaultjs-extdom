@@ -1,26 +1,44 @@
 import Extender from "../../utils/Extender";
 const support = Extender("EventSupport", function(Prototype) {
+	const getEventHandles = element => {
+		if(!element.___EVENTHANDLES___)
+			element.___EVENTHANDLES___ = [];
 		
+		return element.___EVENTHANDLES___;
+	};
+	
 	Prototype.on = function() {
 		if (arguments.length < 2)
 			throw new Error("Too less arguments!");
-
+		
 		const args = Array.from(arguments);
 		const events = args.shift().split(/(\s+)|(\s*,\s*)/);
 		const filter = typeof args[0] === "string" ? args.shift() : undefined;
-		const callback = args.shift();
+		const handle = args.shift();
+		const eventhandles = getEventHandles(this);
 		events.forEach(event => {
-			this.addEventListener( event, function(){
-				return callback.apply(callback, arguments);
-			}, {capture : false, once : false, passive : false});			
+			const wrapper = function(){
+				return handle.apply(handle, arguments);
+			};
+			eventhandles.push({event : event,handle : handle,wrapper : wrapper});
+			this.addEventListener( event, wrapper, {capture : false, once : false, passive : false});			
 		});		
 		return this;
 	};
 	
 	
-	Prototype.removeOn = function(aEvent, aCallback){
-		const events = aEvent.split(/(\s+)|(\s*,\s*)/);
-		events.forEach(event =>	Prototype.removeEventListener.apply(this, event, aCallback));
+	Prototype.removeOn = function(){
+		const args = Array.from(arguments);
+		const eventhandles = getEventHandles(this);
+		const events = typeof args[0] === "string"  ? args.shift().split(/(\s+)|(\s*,\s*)/) : null;
+		const handle = typeof args[0] === "function" ? args.shift() : null;
+		
+		const items = eventhandles.filter(item => (!events ? true : events.indexOf(item.event) >= 0) && (!handle ? true : handle == item.handle));
+		items.forEach(item => {
+			const index = eventhandles.indexOf(item);
+			this.removeEventListener(item.event, item.wrapper);
+			eventhandles.splice(index, 1);
+		});
 	};
 	
 	Prototype.trigger = function(){
