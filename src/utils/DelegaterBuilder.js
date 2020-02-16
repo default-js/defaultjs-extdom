@@ -1,15 +1,17 @@
 const DelegaterBuilder = function() {
-	let args = Array.from(arguments);
-	let callback = args.shift();
-	let source = args.shift();
-	args.forEach((function(aSource, aCallback, aTarget){
-		Object.getOwnPropertyNames(aTarget).forEach(
-			(function(aSource, aTarget,aCallback,  aName) {
-				let prop = Object.getOwnPropertyDescriptor(aTarget, aName);
-				if (typeof aSource[aName] === "undefined" && typeof prop.value === "function")
-					aSource[aName] = function(){return aCallback.call(this, aName, arguments);};										
-			}).bind(null, aSource, aTarget, aCallback));
-	}).bind(null, source, callback));
+	const args = Array.from(arguments);
+	const callback = args.shift();
+	const source = args.shift();
+	args.forEach( target =>{
+		Object.getOwnPropertyNames(target)
+		.forEach(name => {
+			const prop = Object.getOwnPropertyDescriptor(target, name);
+			if (typeof source[name] === "undefined" && typeof prop.value === "function")
+				source[name] = function(){
+					return callback.call(this, name, arguments);
+				};										
+		});
+	});
 	
 };
 export default DelegaterBuilder;

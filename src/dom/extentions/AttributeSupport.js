@@ -1,15 +1,15 @@
 import Extender from "../../utils/Extender";
 
-const support = Extender("AttributeSupport", function(Prototype) {
+const support = Extender("AttributeSupport", Prototype => {
 	Prototype.attr = function() {
 		if (arguments.length == 0)
-			return this.hasAttributes() ? (function() {
-				let result = {};
-				this.getAttributeNames().forEach((function(result, name) {
+			return this.hasAttributes() ? (() => {
+				const result = {};
+				this.getAttributeNames().forEach(name => {
 					result[name] = this.getAttribute(name);
-				}).bind(this, result));
+				});
 				return result;
-			}).call(this) : undefined;
+			})() : undefined;
 		else if (arguments.length == 1)
 			return this.getAttribute(arguments[0]);
 		else if (typeof arguments[1] === "undefined" || arguments[1] == null)

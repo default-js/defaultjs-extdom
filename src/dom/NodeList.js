@@ -5,12 +5,12 @@ import ListSupport from "./extentions/ListSupport";
 extendPrototype(NodeList, ListSupport);
 
 NodeList.prototype.applyTo = function(){
-	let args = Array.from(arguments);
-	let calling = args.shift();
-	let isFunction = typeof calling === "function";
-	let results = [];
+	const args = Array.from(arguments);
+	const calling = args.shift();
+	const isFunction = typeof calling === "function";
+	const results = [];
 	for(let i = 0; i < this.length; i++){
-		let node = this[i];
+		const node = this[i];
 		let	result;
 		if(isFunction)
 			result = calling.apply([node].concat(args));
@@ -27,10 +27,10 @@ NodeList.prototype.applyTo = function(){
 NodeList.prototype.val = function() {
 	if(arguments.length == 0){
 		if(this.length > 0){
-			let result = new Map();
-			this.forEach(function(node){
+			const result = new Map();
+			this.forEach(node => {
 				if(typeof node.val === "function"){
-					let value = node.val();
+					const value = node.val();
 					if(value)
 						result.set((node.name || node.id || node.selector()), node.val());
 				}
@@ -43,12 +43,12 @@ NodeList.prototype.val = function() {
 };
 
 NodeList.from = function(){
-	let args = Array.from(arguments);
-	let data = {};
+	const args = Array.from(arguments);
+	const data = {};
 	let counter = 0;
 	
 	while(args.length > 0){
-		let arg = args.shift();
+		const arg = args.shift();
 		if(typeof arg !== "undefined" && arg != null){
 			if(arg instanceof Node)
 				data[counter++] = {value: arg, enumerable: true};
@@ -67,11 +67,11 @@ NodeList.from = function(){
 };
 
 
-DelegaterBuilder(function(aFunctionName, theArguments){
+DelegaterBuilder(function(aFunctionName, theArguments) {
 	let results = [];	
-	this.forEach(function(node){
+	this.forEach(node => {
 		if(node && typeof node[aFunctionName] === "function"){
-			let result = node[aFunctionName].apply(node, theArguments);
+			const result = node[aFunctionName].apply(node, theArguments);
 			if(result){ 
 				if(result instanceof NodeList)
 					results = results.concat(Array.from(result));

@@ -4,9 +4,7 @@ import ReadyEventSupport from "./extentions/ReadyEventSupport";
 
 extendPrototype(Document, QuerySupport, ReadyEventSupport);
 
-document.addEventListener("DOMContentLoaded", function(){
-	document.trigger("ready");
-});
+document.addEventListener("DOMContentLoaded", () => document.trigger("ready"));
 
 
 

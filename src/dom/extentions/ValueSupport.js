@@ -1,20 +1,19 @@
 import Extender from "../../utils/Extender";
 
-const InputTypes =[
+const InputTypes = [
 	{
 		selector : "select",
 		get : function(){
-			let result = [];
-			this.find("option").forEach(function(option){
+			const result = [];
+			this.find("option").forEach(option => {
 				if(option.selected)
 					result.push(option.value);
-			});
-			
+			});			
 			return result;
 		},
 		set : function(){				
 			let values = [];
-			let args = Array.from(arguments);
+			const args = Array.from(arguments);
 			let arg = args.shift();
 			while(arg){
 				if(Array.isArray(arg))
@@ -25,10 +24,7 @@ const InputTypes =[
 				arg = args.shift();
 			}
 			this.value = values;
-			this.find("option").forEach(function(option){
-				option.selected = values.indexOf(option.value) >= 0;
-			});
-			
+			this.find("option").forEach(option => option.selected = values.indexOf(option.value) >= 0);			
 			this.trigger("changed");
 		}			
 	},
@@ -71,7 +67,7 @@ const getInputType = function(aElement){
 };
 
 
-const support = Extender("ValueSupport", function(Prototype) {	
+const support = Extender("ValueSupport", Prototype => {	
 	Prototype.val = function() {
 		let type = getInputType(this);
 		if(arguments.length == 0)

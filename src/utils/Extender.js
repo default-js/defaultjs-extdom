@@ -1,6 +1,6 @@
 import Utils from "./Utils";
 
-const EXTENSIONS_MAP = Utils.globalVar("__DOM_API_EXTENSION_MAP__", {});
+const EXTENSIONS_MAP = Utils.globalVar("___DOM_API_EXTENSION_MAP___", {});
 const Extender = function(aName, aExtention){
 	return function(aType){	
 		let extensions = EXTENSIONS_MAP[aType.name];

@@ -24,7 +24,7 @@ const queryExecuter = function(aElement, aSelector){
 };
 
 
-const support = Extender("QuerySupport",function(Prototype) {	
+const support = Extender("QuerySupport", Prototype => {	
 	Prototype.find = function() {
 		let nodes = [];
 		let args = Array.from(arguments);

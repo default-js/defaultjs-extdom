@@ -1,7 +1,7 @@
 import Extender from "../../utils/Extender";
 import Utils from "../../utils/Utils";
 
-const support = Extender("ManipulationSupport", function(Prototype) {	
+const support = Extender("ManipulationSupport", Prototype => {	
 	Prototype.empty = function(){
 		let nodes = this.childNodes
 		while(nodes.length != 0)			
@@ -23,14 +23,14 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 			else
 				return this.innerHTML;
 		else 
-			Array.from(arguments).forEach((function(content){
+			Array.from(arguments).forEach(content => {
 				if(typeof content === "string")
 					this.innerHTML = content;
 				else if(content instanceof Node || content instanceof NodeList){
 					this.empty();
 					this.append(content);
 				}
-			}).bind(this));		
+			});		
 			
 		return this;
 	};
@@ -79,9 +79,7 @@ const support = Extender("ManipulationSupport", function(Prototype) {
 		const newNode = arguments.length == 1 ? arguments[0] : arguments[1];
 		
 		if(newNode instanceof Array || newNode instanceof NodeList || newNode instanceof HTMLCollection){
-			newNode.forEach(function(aItem){
-				parent.insertBefore(aItem, oldNode);
-			});
+			newNode.forEach(aItem => parent.insertBefore(aItem, oldNode));
 			oldNode.remove();
 		}
 		else

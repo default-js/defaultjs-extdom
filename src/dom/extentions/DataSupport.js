@@ -1,21 +1,21 @@
 import Extender from "../../utils/Extender";
-const support = Extender("DataSupport", function(Prototype) {
+const support = Extender("DataSupport", Prototype => {
 	Prototype.data = function() {
-		if (typeof this.__data__ === "undefined") {
-			this.__data__ = {};
+		if (typeof this.___data___ === "undefined") {
+			this.___data___ = {};
 			if(typeof this.dataset !== "undefined")
 				for (name in this.dataset)
-					this.__data__[name] = this.dataset[name];
+					this.___data___[name] = this.dataset[name];
 		}
 
 		if (arguments.length == 0)
-			return this.__data__;
+			return this.___data___;
 		else if (arguments.length == 1)
-			return this.__data__[arguments[0]] ;
+			return this.___data___[arguments[0]] ;
 		else if (typeof arguments[1] === "undefined" || arguments[1] == null)
-			delete this.__data__[arguments[0]];
+			delete this.___data___[arguments[0]];
 		else
-			this.__data__[arguments[0]] = arguments[1];
+			this.___data___[arguments[0]] = arguments[1];
 		
 		return this;
 	};

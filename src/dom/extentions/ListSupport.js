@@ -1,6 +1,6 @@
 import Extender from "../../utils/Extender";
 
-const support = Extender("ListSupport", function(Prototype) {		
+const support = Extender("ListSupport", Prototype => {		
 	Prototype.indexOf = function() {
 		for(let i = 0; i < this.length; i++)
 			if(this[i] == arguments[0])

@@ -1,8 +1,8 @@
 const extendPrototype = function(){
-	let args = 	Array.from(arguments);
-	let type = args.shift();	
+	const args = 	Array.from(arguments);
+	const type = args.shift();	
 	while(args.length > 0){
-		let extender = args.shift();
+		const extender = args.shift();
 		extender(type);
 	}
 };
