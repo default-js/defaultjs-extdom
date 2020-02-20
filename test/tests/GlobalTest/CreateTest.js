@@ -1,27 +1,36 @@
 describe("GlobalTest Create", function() {
-	beforeAll(function(done){
-		window.document.body.innerHTML = "";
-		done();
+	beforeAll(() => {});
+	
+	it("create a singele element", () => {	
+		const content = window.create("<div>test-1</div>").first();
+		expect(content).toBeDefined();
+		expect(content instanceof Node).toBe(true);
+		content.remove();
 	});
 	
-	it("create a singele element", function(done){	
-		let content = window.create("<div>test-1</div>");
-		let element = content.first();
-		expect(element).toBeDefined();
-		done();
+	it("create a element with child elements)", () => {
+		let content = window.create("<div>test-2" +
+									"	<div>test-2-1</div>" +
+									"</div>").first();
+		expect(content).toBeDefined();
+		expect(content instanceof Node).toBe(true);
+		expect(content.childNodes.length).toBe(2);
+		content.remove();
 	});
 	
-	it("create a element with child elements)", function(done){
-		let content = window.create("<div>test-2<div>test-2-1</div></div>");
-		let element = content.first();
-		expect(element).toBeDefined();
-		expect(element.childNodes.length).toBe(2);
-		done();
-	});
-	
-	it("create multible elements", function(done){
-		let content = window.create("<div>test-1</div><div>test-2</div>");
+	it("create multible elements", () => {
+		let content = window.create("<div>test-1</div>" +
+									"<div>test-2</div>");
 		expect(content.length).toBe(2);
-		done();
+		expect(content instanceof NodeList).toBe(true);;
+		content.remove();
+	});
+	
+	
+	it("create script tag", () => {
+		let content = window.create("<script type=\"application/javascript\"></script>").first();
+		expect(content).toBeDefined();
+		expect(content instanceof HTMLScriptElement).toBe(true);
+		content.remove();
 	});
 });

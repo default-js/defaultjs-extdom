@@ -1,10 +1,7 @@
-describe("GlobalTest Create", function() {
-	beforeAll(function(done){
-		window.document.body.innerHTML = "";
-		done();
-	});
+describe("JQuery compatibility Tests", function() {
+	beforeAll(() =>{});
 	
-	it("create a singele element", function(){	
+	it("event test 1", () => {	
 		const base = create("<div></div>").first();
 		document.body.append(base);
 		const button = create("<button>test</button>").first();
@@ -13,14 +10,7 @@ describe("GlobalTest Create", function() {
 		const actions = [];
 		let errorJquery = false;	
 		let errorNativ = false;
-		return new Promise(r => {
-			const script = create("<script></script>").first();
-			script.onload = () => {
-				r()
-			};			
-			base.append(script);
-			script.src = "/static/jquery-2.2.4.min.js";
-		})
+		script("/static/jquery-2.2.4.min.js")
 		.then(() => {			
 			$(base).on("click", () => errorJquery = true);
 			base.on("click", () => errorNativ = true);
@@ -28,7 +18,6 @@ describe("GlobalTest Create", function() {
 				button.on("click", (e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					e.stopImmediatePropagation();
 					resolve(true)
 				});
 			}));			
@@ -45,11 +34,11 @@ describe("GlobalTest Create", function() {
 			setTimeout(() => {
 				$(button).trigger("click");
 				button.trigger("click");
-			}, 1000);
+			}, 10);
 			return Promise.all(actions);
 		})
 		.then((result) => {
-			debugger;
+			base.remove();
 			if(!errorJquery && !errorNativ && result[0] && result[1])
 				return Promise.resolve();
 			

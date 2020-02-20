@@ -8,8 +8,6 @@ Utils.global.defaultjs.extdom = Utils.global.defaultjs.extdom || {
 	}
 };
 
-const parser = new DOMParser();
-
 Utils.global.find = function() {
 	return document.find.apply(document, arguments);
 };
@@ -18,13 +16,28 @@ Utils.global.ready = function() {
 	return document.ready.apply(document, arguments);
 };
 
-Utils.global.create = function(aContent, aContentType) {
+Utils.global.create = function(aContent, asTemplate) {
 	if (typeof arguments[0] !== "string")
 		throw new Error("The first argument must be a string!");
 	
-	const parsed = parser.parseFromString(arguments[0].trim(), arguments[1] || "text/html");
-	const frag = document.createDocumentFragment();
-	frag.append(parsed.head.childNodes);
-	frag.append(parsed.body.childNodes);
-	return frag.childNodes;
+	const template = document.createElement("template");
+	template.innerHTML = aContent;
+	if(asTemplate)
+		return template;
+	
+	return document.importNode(template.content, true).childNodes;
+};
+
+Utils.global.script = function(aFile, aTarget) {
+	if (typeof arguments[0] !== "string")
+		throw new Error("The first argument must be a string!");
+	
+	return new Promise((r,e) => {
+		const script = document.createElement("script");
+		script.async = true;
+		script.onload = function(){r()};
+		script.onerror = function(){e("jquery load error!")};
+		!aTarget ? document.body.append(script) : aTarget.append(script);
+		script.src = aFile;
+	});
 };

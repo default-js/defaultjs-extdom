@@ -1,7 +1,7 @@
 {
   "name": "@default-js/defaultjs-extdom",
   "buildName": "defaultjs-extdom",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
   "main": "js/index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "karma-webpack": "^4.0.2",
     "puppeteer": "^2.1.1",
     "replace-in-file-webpack-plugin": "^1.0.6",
-    "webpack": "^4.41.5",
+    "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
     "webpack-merge": "^4.2.2"
