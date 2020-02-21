@@ -29,15 +29,18 @@ Utils.global.create = function(aContent, asTemplate) {
 };
 
 Utils.global.script = function(aFile, aTarget) {
-	if (typeof arguments[0] !== "string")
-		throw new Error("The first argument must be a string!");
+	if(aFile instanceof Array)
+		return Promise.all(aFile.map(file => Utils.global.script(file, aTarget)));
 	
-	return new Promise((r,e) => {
-		const script = document.createElement("script");
-		script.async = true;
-		script.onload = function(){r()};
-		script.onerror = function(){e("jquery load error!")};
-		!aTarget ? document.body.append(script) : aTarget.append(script);
-		script.src = aFile;
-	});
+	if(aFile instanceof String)	
+		return new Promise((r,e) => {
+			const script = document.createElement("script");
+			script.async = true;
+			script.onload = function(){r()};
+			script.onerror = function(){e("jquery load error!")};
+			!aTarget ? document.body.append(script) : aTarget.append(script);
+			script.src = aFile;
+		});
+	else
+		return Promise.reject("First parameter must be an array of strings or a string!");
 };

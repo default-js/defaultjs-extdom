@@ -11,7 +11,15 @@ const support = Extender("ListSupport", Prototype => {
 
 	Prototype.forEach = function(){
 		return Array.prototype.forEach.apply(Array.from(this), arguments);
-	};	
+	};
+	
+	Prototype.map = function(){
+		return Array.prototype.map.apply(Array.from(this), arguments);
+	};
+	
+	Prototype.filter = function(){
+		return Array.prototype.filter.apply(Array.from(this), arguments);
+	};
 
 	Prototype.first = function(){
 		if(this.length > 0)

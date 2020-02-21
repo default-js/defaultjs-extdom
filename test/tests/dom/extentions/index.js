@@ -6,3 +6,4 @@ import "./AttributeSupportTest";
 import "./HtmlClassSupportTest";
 import "./ValueSupportTest";
 import "./ReadyEventSupportTest";
+import "./ListSupportTest";
