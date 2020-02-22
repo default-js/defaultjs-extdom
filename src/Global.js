@@ -32,7 +32,7 @@ Utils.global.script = function(aFile, aTarget) {
 	if(aFile instanceof Array)
 		return Promise.all(aFile.map(file => Utils.global.script(file, aTarget)));
 	
-	if(aFile instanceof String)	
+	if(typeof aFile === "string")	
 		return new Promise((r,e) => {
 			const script = document.createElement("script");
 			script.async = true;
