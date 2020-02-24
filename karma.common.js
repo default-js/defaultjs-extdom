@@ -9,7 +9,7 @@ module.exports = {
 	frameworks : [ "jasmine" ],
 	// list of files / patterns to load in the browser
 	files : [
-		"src/**/*.js",
+		//"src/**/*.js",
 		"test/index.js",
 		"test/sites/**/*.html",
 		{pattern: "test/data/**/*", included: false, served: true, watched: false, nocache: false},
@@ -26,7 +26,7 @@ module.exports = {
 	// available preprocessors:
 	// https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors : {
-		"src/**/*.js" : [ "webpack", "coverage"],
+		"src/**/*.js" : [ "webpack", "sourcemap", "coverage"],
 		"test/*.js" : [ "webpack", "sourcemap"],
 		"test/sites/**/*.html" : [ "html2js" ]
 	},

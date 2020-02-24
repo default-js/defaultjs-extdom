@@ -84,6 +84,35 @@ const support = Extender("ManipulationSupport", Prototype => {
 		}
 		else
 			parent.replaceChild(newNode,oldNode);
-	}
+	};
+	
+	Prototype.after = function(){
+		if(this.parentNode == null)
+			throw new Error("Can't insert nodes after this node! Parent node not available!");
+		
+		const parent = this.parentNode;
+		const next = this.nextSibling;
+		if(next)
+			Prototype.before.apply(next, arguments);
+		else
+			Prototype.append.apply(parent, arguments);
+	};	
+	
+	Prototype.before = function(){
+		if(this.parentNode == null)
+			throw new Error("Can't insert nodes after this node! Parent node not available!");
+		
+		const parent = this.parentNode;
+		const inserter = (node) => {parent.insertBefore(node, this);}
+		for(let i = 0; i < arguments.length; i++){
+			const arg = arguments[i];
+			if(arg instanceof Node)
+				inserter(arg);
+			else if(typeof arg === "string")
+				arg.forEach(inserter);
+			else if(typeof arg.forEach === "function")
+				arg.forEach(inserter);
+		}
+	};	
 });
 export default support;

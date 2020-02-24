@@ -8,9 +8,10 @@ module.exports = merge(common, {
     mode : 'development',
     optimization : {
     	minimize : false,
-	    usedExports : true
+	    usedExports : false
     },
     devtool : 'inline-source-map',
+    watch: true,
     devServer : {
         contentBase : './WebContent',
         hot : true,
@@ -18,7 +19,7 @@ module.exports = merge(common, {
         port : 80
     },
     output : {
-	    filename : project.name + '.js',
+	    filename : project.buildname + '.js',
         path : path.resolve(__dirname, 'dist')
     },
     plugins : [ new webpack.HotModuleReplacementPlugin() ]  

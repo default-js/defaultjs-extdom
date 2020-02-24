@@ -1,11 +1,11 @@
 {
 	"name": "@default-js/defaultjs-extdom",
-	"buildName": "defaultjs-extdom",
-	"version": "1.0.0-beta.11",
+	"buildname": "defaultjs-extdom",
+	"version": "1.0.0-beta.13",
 	"description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
 	"main": "js/index.js",
 	"scripts": {
-		"build-only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
+		"build:only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
 		"build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
 		"//dev:live": "webpack-dev-server --open --config webpack.dev-server.js && npm run test:live",
 		"dev:live": "webpack-dev-server --open --config webpack.dev-server.js",
@@ -27,6 +27,7 @@
 		"karma-jasmine": "^2.0.1",
 		"karma-safari-launcher": "^1.0.0",
 		"karma-sourcemap-loader": "^0.3.7",
+		"karma-jasmine-html-reporter": "^1.5.2",
 		"karma-webpack": "^4.0.2",
 		"puppeteer": "^2.1.1",
 		"replace-in-file-webpack-plugin": "^1.0.6",
@@ -46,5 +47,8 @@
 	"directories": {
 		"src": "src",
 		"test": "test"
+	},
+	"dependencies": {
+		
 	}
 }
