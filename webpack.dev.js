@@ -7,21 +7,22 @@ const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 module.exports = merge(common, {
     mode : 'development',
     optimization : {
+    	minimize : false,
 	    usedExports : true
     },
     devtool : 'inline-source-map',   
     output : {
-	    filename : project.buildName + '.js',
+	    filename : project.name + '.js',
         path : path.resolve(__dirname, 'dist')
-    },
-    plugins : [ new ReplaceInFileWebpackPlugin([ 
-    	{
-        	dir : 'dist',
-        	test : [ /\.js$/ ],
-	        rules : [{
+    }, plugins : [ new ReplaceInFileWebpackPlugin([ 
+		{
+	        dir : 'dist',
+	        test : [ /\.js$/],
+	        rules : [ {
 	            search : /\$\{version\}/ig,
-	            replace : project.version
+	            replace :  project.version
 	        }]
-    	}]) 
-    ]
+		} 
+	]) 
+]
 });

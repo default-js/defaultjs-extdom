@@ -14,10 +14,11 @@ module.exports = merge(common, {
     devServer : {
         contentBase : './WebContent',
         hot : true,
-        quiet : true
+        quiet : true,
+        port : 80
     },
     output : {
-	    filename : project.buildName + '.js',
+	    filename : project.name + '.js',
         path : path.resolve(__dirname, 'dist')
     },
     plugins : [ new webpack.HotModuleReplacementPlugin() ]  

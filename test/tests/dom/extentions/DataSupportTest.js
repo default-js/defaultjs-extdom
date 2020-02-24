@@ -1,4 +1,4 @@
-import Utils from "test/helpers/Utils";
+import Utils from "@test/helpers/Utils";
 
 describe("DataSupport Tests", function() {
 	beforeAll(function(done){

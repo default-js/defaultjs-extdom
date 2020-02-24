@@ -7,17 +7,17 @@ const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 module.exports = merge(common,{
     mode: 'production',
     output : {
-	    filename : project.buildName + '.min.js',
+	    filename : project.name + '.min.js',
         path : path.resolve(__dirname, 'dist')
-    },
-    plugins : [ new ReplaceInFileWebpackPlugin([ 
-    	{
-        	dir : 'dist',
-        	test : [ /\.js$/ ],
-	        rules : [{
+    }, plugins : [ new ReplaceInFileWebpackPlugin([ 
+		{
+	        dir : 'dist',
+	        test : [ /\.js$/],
+	        rules : [ {
 	            search : /\$\{version\}/ig,
-	            replace : project.version
+	            replace :  project.version
 	        }]
-    	}]) 
-    ]
+		} 
+	]) 
+]
 });
