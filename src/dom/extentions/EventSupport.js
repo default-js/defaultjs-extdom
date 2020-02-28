@@ -68,15 +68,16 @@ const support = Extender("EventSupport", Prototype => {
 		getEventHandles(this).remove(events, handle);
 	};
 	
-	Prototype.trigger = function(){
-		const args = Array.from(arguments);		
-		const type = args.shift();		
-		const data = args.length > 1 ? args.shift() : null;
-		const event = !data ? new CustomEvent(type,  { bubbles: true, cancelable: true, detail: data }) : new Event(type, true, true); 
-		
-		if(data instanceof Event)
-			event.delegatedEvent =  data;
-		
+	Prototype.trigger = function() {
+		const args = Array.from(arguments);
+		const type = args.shift();
+		const delegate = args[0] instanceof Event ? args.shift() : null
+		const data = args.length > 1 ? args : delegate;
+		const event = data ? new CustomEvent(type, { "bubbles": true, "cancelable": true, detail: data }) : new Event(type, { "bubbles": true, "cancelable": true });
+
+		if (delegate)
+			event.delegatedEvent = delegate;
+
 		this.dispatchEvent(event);
 		return this;
 	};
