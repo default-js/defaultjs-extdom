@@ -13,20 +13,22 @@ module.exports = {
 		"test/index.js",
 		"test/sites/**/*.html",
 		{pattern: "test/data/**/*", included: false, served: true, watched: false, nocache: false},
-		{pattern: "test/templates/**/*", included: false, served: true, watched: true, nocache: false}	
+		{pattern: "test/templates/**/*", included: false, served: true, watched: true, nocache: false},
+		{pattern: "test/static/**/*", included: false, served: true, watched: false, nocache: false}
 	],
 	proxies: {
 		"/data/": "/base/test/data/",
-		"/templates/": "/base/test/templates/"
+		"/templates/": "/base/test/templates/",
+		"/static/": "/base/test/static/",
 	},
 	// list of files / patterns to exclude
 	exclude : [
-		//"node_modules/*"
+		"node_modules/*"
 	],
 	// available preprocessors:
 	// https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors : {
-		"src/**/*.js" : [ "webpack", "sourcemap", "coverage"],
+		"src/**/*.js" : [ "webpack", "coverage"],
 		"test/*.js" : [ "webpack", "sourcemap"],
 		"test/sites/**/*.html" : [ "html2js" ]
 	},
@@ -50,7 +52,10 @@ module.exports = {
 	colors : true,
 	autoWatch : true,
 	client : {
-		clearContext : true
+		clearContext : true,
+		//useIframe : false,
+		runInParent : false,
+		captureConsole: true
 	},
 	singleRun : false,
 	concurrency : Infinity,
