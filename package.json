@@ -1,7 +1,7 @@
 {
 	"name": "@default-js/defaultjs-extdom",
 	"buildname": "defaultjs-extdom",
-	"version": "1.0.0-beta.14",
+	"version": "1.0.0-beta.15",
 	"description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
 	"main": "js/index.js",
 	"scripts": {

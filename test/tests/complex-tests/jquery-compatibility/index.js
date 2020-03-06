@@ -57,6 +57,50 @@ describe("JQuery compatibility Tests", function() {
 	});
 	
 	
+	it("event test 1 -> event triggered by jquery with jquery compatibility files", async () => {
+		await import("../../../../compatibility/jquery/index.js");
+		
+		const base = create("<div></div>").first();
+		document.body.append(base);
+		const button = create("<button>test</button>").first();
+		base.append(button);	
+		
+		const actions = [];
+		let errorJquery = false;	
+		let errorNativ = false;
+		$(base).on("click", () => errorJquery = true);
+		base.on("click", () => errorNativ = true);
+		actions.push(new Promise((resolve) => {
+			button.on("click", (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				resolve(true)
+			});
+		}));			
+		actions.push(new Promise(
+			(resolve) => {
+				$(button).on("click", (e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					e.stopImmediatePropagation();
+					resolve(true)
+				});
+			}));
+		
+		setTimeout(() => {
+			$(button).trigger("click");
+			//button.trigger("click");
+		}, 10);
+		const result = await Promise.all(actions);
+		expect(errorJquery).toBe(false);
+		expect(errorNativ).toBe(false)
+		expect(result[0]).toBe(true)
+		expect(result[1]).toBe(true)
+		
+		base.remove();
+	});
+	
+	
 	it("event test 2 -> event triggered with defaultjs-extdom", async () => {	
 		const base = create("<div></div>").first();
 		document.body.append(base);

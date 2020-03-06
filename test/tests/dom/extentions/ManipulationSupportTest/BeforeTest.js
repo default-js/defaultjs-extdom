@@ -13,7 +13,6 @@ describe("ManipulationSupportTest before", () => {
 	});
 	
 	it("multible nodes before an other", () => {
-		debugger;
 		const container = create("<div><div></div></div>").first();		
 		const target = container.children[0];
 		const content = create(	"<div></div>" +
@@ -32,7 +31,6 @@ describe("ManipulationSupportTest before", () => {
 	});
 	
 	it("one nodes between two nodes", () => {
-		debugger;
 		const container = create("<div><div></div><div></div></div>").first();		
 		const target = container.children.last();
 		const first = container.children.first();
@@ -46,7 +44,6 @@ describe("ManipulationSupportTest before", () => {
 	});
 	
 	it("multible nodes between two nodes", () => {
-		debugger;
 		const container = create("<div><div></div><div></div></div>").first();		
 		const target = container.children.last();
 		const first = container.children.first();

@@ -29,6 +29,7 @@ module.exports = {
 	// https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors : {
 		"src/**/*.js" : [ "webpack", "coverage"],
+		"compatibility/**/*.js" : [ "webpack"],
 		"test/*.js" : [ "webpack", "sourcemap"],
 		"test/sites/**/*.html" : [ "html2js" ]
 	},

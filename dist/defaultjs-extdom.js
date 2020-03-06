@@ -145,7 +145,7 @@ __webpack_require__.r(__webpack_exports__);
 
 _utils_Utils__WEBPACK_IMPORTED_MODULE_0__["default"].global.defaultjs = _utils_Utils__WEBPACK_IMPORTED_MODULE_0__["default"].global.defaultjs || {};
 _utils_Utils__WEBPACK_IMPORTED_MODULE_0__["default"].global.defaultjs.extdom = _utils_Utils__WEBPACK_IMPORTED_MODULE_0__["default"].global.defaultjs.extdom || {
-	VERSION : "1.0.0-beta.14",
+	VERSION : "1.0.0-beta.15",
 	utils : {
 		Utils: _utils_Utils__WEBPACK_IMPORTED_MODULE_0__["default"]
 	}
