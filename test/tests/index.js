@@ -2,7 +2,7 @@
 import "../index";
 
 //TESTS
-import "./utils";
+//import "./utils";
 import "./dom";
-import "./GlobalTest";
-import "./complex-tests";
+//import "./GlobalTest";
+//import "./complex-tests";
