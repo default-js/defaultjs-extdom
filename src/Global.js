@@ -37,7 +37,7 @@ Utils.global.script = function(aFile, aTarget) {
 			const script = document.createElement("script");
 			script.async = true;
 			script.onload = function(){r()};
-			script.onerror = function(){e("jquery load error!")};
+			script.onerror = function(){throw new Error("load error!")};
 			!aTarget ? document.body.append(script) : aTarget.append(script);
 			script.src = aFile;
 		});

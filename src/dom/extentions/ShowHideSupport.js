@@ -1,34 +1,40 @@
 import Extender from "../../utils/Extender";
 
-const isHidden = (element) =>{
-	if(typeof element.___hidden__ == "undefined")
-		element.___hidden__ = element.style.display === "none"
+const HIDEVALUE = "none";
+
+const isHidden = (element) => {
+	return element.style.display === HIDEVALUE
+};
+
+const init = (element) => {	
+	let display = !isHidden(element) ? element.style.display : "";
 	
-	return element.___hidden__;
-}
+	element.show = (function(){
+		this.style.display = display;
+		return this;		
+	}).bind(element);
+	
+	element.hide = (function(){
+		this.style.display = HIDEVALUE;
+		return this;		
+	}).bind(element);
+	
+	return element;
+};
+
 
 const support = Extender("ShowHideSupport", Prototype => {
-	Prototype.show = function(){
-		if(isHidden(this)){
-			this.style.display = this.___display___ || "";
-			this.___hidden__ = false;
-		}
-		return this;
+	Prototype.show = function() {
+		return init(this).show.apply(null, arguments)
 	};
-	
-	Prototype.hide = function(){
-		if(!isHidden(this)){
-			this.___display___ = this.style.display !== "none" ? this.style.display : undefined;
-			this.style.display = "none";
-			this.___hidden__ = true;
-		}	
-		
-		return this;
+
+	Prototype.hide = function() {
+		return init(this).hide.apply(null, arguments)
 	};
-	
-	Prototype.toggleShow = function(){
+
+	Prototype.toggleShow = function() {
 		return isHidden(this) ? this.show() : this.hide();
 	};
-	
+
 });
 export default support;

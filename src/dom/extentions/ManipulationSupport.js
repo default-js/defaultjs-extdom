@@ -24,10 +24,10 @@ const support = Extender("ManipulationSupport", Prototype => {
 				return this.innerHTML;
 		else 
 			Array.from(arguments).forEach(content => {
+				this.empty();
 				if(typeof content === "string")
-					this.innerHTML = content;
-				else if(content instanceof Node || content instanceof NodeList){
-					this.empty();
+					this.append(content);
+				else if(content instanceof Node || content instanceof NodeList || content instanceof HTMLCollection){
 					this.append(content);
 				}
 			});		

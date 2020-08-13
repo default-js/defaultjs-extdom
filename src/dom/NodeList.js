@@ -84,7 +84,7 @@ DelegaterBuilder(function(aFunctionName, theArguments) {
 	if(results.length === 0)
 		return undefined;
 	else if(results[0] instanceof Node || results[0] instanceof NodeList)
-		return NodeList.from.apply(null, results);
+		return NodeList.from(results);
 	else
 		return results;
 },NodeList.prototype, Node.prototype, HTMLElement.prototype, HTMLInputElement.prototype, Element.prototype, EventTarget.prototype);
