@@ -30,6 +30,46 @@ describe("EventSupport Test", () => {
 		return result;
 	});
 
+	it("test on with multiple events as string", async () => {
+		const container = create("<div><button></button></div>").first();
+		const button = container.find("button").first();
+
+		return new Promise((resolve, reject) => {
+			let counter = 0;
+			button.on("test-a test-b", (event) => {
+				counter = counter + 1;
+			});
+
+			button.trigger("test-a");
+			button.trigger("test-b");
+			setTimeout(() => {
+				container.remove();
+				if (counter != 2) reject();
+				else resolve();				
+			}, 1000);
+		});
+	});
+
+	it("test on with multiple event as array", async () => {
+		const container = create("<div><button></button></div>").first();
+		const button = container.find("button").first();
+
+		return new Promise((resolve, reject) => {
+			let counter = 0;
+			button.on(["test-a", "test-b"], (event) => {
+				counter = counter + 1;
+			});
+
+			button.trigger("test-a");
+			button.trigger("test-b");
+			setTimeout(() => {
+				container.remove();
+				if (counter != 2) reject();
+				else resolve();				
+			}, 1000);
+		});
+	});
+
 	it("test removeOn", () => {
 		let container = find("#remove-on");
 		let handler = function (event) {};

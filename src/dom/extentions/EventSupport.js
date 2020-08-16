@@ -47,7 +47,7 @@ const support = Extender("EventSupport", (Prototype) => {
 		if (arguments.length < 2) throw new Error("Too less arguments!");
 
 		const args = Array.from(arguments);
-		const events = args.shift().split(/(\s+)|(\s*,\s*)/);
+		let events = typeof args[0] === "string" ? args.shift().split(/(\s+)|(\s*,\s*)/) : args.shift();
 		const filter = typeof args[0] === "string" ? args.shift() : null;
 		const handle = args.shift();
 		const option = typeof args[0] !== "undefined" ? args.shift() : { capture: false, once: false, passive: false };
@@ -79,28 +79,26 @@ const support = Extender("EventSupport", (Prototype) => {
 
 	Prototype.trigger = function () {
 		const args = Array.from(arguments);
-		const timeout = typeof args[0] === "number" ? args.shift() : -1;
-		const type = args.shift();
-		const delegate = args[0] instanceof Event ? args.shift() : null;
-		const data = args.length >= 1 ? args.shift() : delegate;
-		const event = data ? new CustomEvent(type, { bubbles: true, cancelable: true, detail: data }) : new Event(type, { bubbles: true, cancelable: true });
-
-		if (delegate) event.delegatedEvent = delegate;
-
-
-		if(timeout >= 0) {
+		const timeout = typeof args[0] === "number" ? args.shift() : -1;		
+		if (timeout >= 0) {
+			const type = args[0];
 			const timeouts = getTriggerTimeouts(this);
 			const timeoutid = timeouts[type];
-			if(timeoutid)
-				clearTimeout(timeoutid)
-			
+			if (timeoutid) clearTimeout(timeoutid);
+
 			timeouts[type] = setTimeout(() => {
 				delete timeouts[type];
-				this.dispatchEvent(event);	
+				this.trigger.apply(this, args);
 			}, timeout);
-		}
-		else
+		} else {
+			const type = args.shift();
+			const delegate = args[0] instanceof Event ? args.shift() : null;
+			const data = args.length >= 1 ? (args.length == 0 ? args.shift() : args) : delegate;
+			const event = data ? new CustomEvent(type, { bubbles: true, cancelable: true, detail: data }) : new Event(type, { bubbles: true, cancelable: true });
+
+			if (delegate) event.delegatedEvent = delegate;
 			this.dispatchEvent(event);
+		}
 		return this;
 	};
 });
