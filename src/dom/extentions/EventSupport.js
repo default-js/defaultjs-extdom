@@ -2,6 +2,7 @@ import Extender from "../../utils/Extender";
 
 const DEFAULT_TIMEOUT = 100;
 const support = Extender("EventSupport", (Prototype) => {
+	const addEventListener = Prototype.addEventListener;
 	const getEventHandles = (element) => {
 		if (!element.___EVENTHANDLES___) {
 			const handles = [];
@@ -32,15 +33,10 @@ const support = Extender("EventSupport", (Prototype) => {
 		return element.___EVENTTRIGGERTIMEOUTS___;
 	};
 
-	const getHandleTimeouts = (element) => {
-		if (!element.___EVENTHANDLETIMEOUTS___) element.___EVENTHANDLETIMEOUTS___ = {};
-
-		return element.___EVENTHANDLETIMEOUTS___;
-	};
-
-	const addEventListener = Prototype.addEventListener;
 	Prototype.addEventListener = function (aEvent, aHandle, aOption) {
-		Prototype.on.call(this, aEvent, aHandle, typeof aOption === "boolean" ? { capture: aOption, once: false, passive: false } : aOption);
+		if (typeof aOption === "boolean") Prototype.on.call(this, aEvent, aHandle, { capture: aOption, once: false, passive: false });
+		else if (typeof aOption === "object") Prototype.on.call(this, aEvent, aHandle, aOption);
+		else Prototype.on.call(this, aEvent, aHandle);
 	};
 
 	Prototype.on = function () {
@@ -53,8 +49,8 @@ const support = Extender("EventSupport", (Prototype) => {
 		const option = typeof args[0] !== "undefined" ? args.shift() : { capture: false, once: false, passive: false };
 		const wrapper = function (aEvent) {
 			if (filter) {
-				const type = aEvent.target.nodeType;
-				if (!type && (type == Node.DOCUMENT_TYPE_NODE || type == Node.DOCUMENT_FRAGMENT_NODE) && !aEvent.target.is(filter)) return;
+				const target = event.target;
+				if (typeof target.is === "function" && !aEvent.target.is(filter)) return true;
 			}
 			const result = handle.apply(handle, arguments);
 			if (option.once) getEventHandles(aEvent.currentTarget).remove([aEvent.type], handle);
@@ -79,7 +75,7 @@ const support = Extender("EventSupport", (Prototype) => {
 
 	Prototype.trigger = function () {
 		const args = Array.from(arguments);
-		const timeout = typeof args[0] === "number" ? args.shift() : -1;		
+		const timeout = typeof args[0] === "number" ? args.shift() : -1;
 		if (timeout >= 0) {
 			const type = args[0];
 			const timeouts = getTriggerTimeouts(this);
