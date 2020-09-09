@@ -16,6 +16,16 @@ const support = Extender("EventSupport", (Prototype) => {
 		return element.___EVENTTRIGGERTIMEOUTS___;
 	};
 
+	const removeWrapper = (element, data) => {
+		const { wrapper, option, events } = data;
+		const capture = option.capture;
+		for (let event of events) {
+			element.removeEventListener(event, wrapper, capture);
+		}
+
+		getWrapperHandleMap(element).delete(handle);
+	}
+
 	Prototype.on = function() {
 		if (arguments.length < 2) throw new Error("Too less arguments!");
 
@@ -23,18 +33,18 @@ const support = Extender("EventSupport", (Prototype) => {
 		let events = typeof args[0] === "string" ? args.shift().split(/(\s+)|(\s*,\s*)/) : args.shift();
 		const filter = typeof args[0] === "string" ? args.shift() : null;
 		const handle = args.shift();
-		const option = typeof args[0] !== "undefined" ? args.shift() : { capture: false, once: false, passive: false };
+		const option = typeof args[0] === "undefined" ? { capture: false, once: false, passive: false } : (typeof args[0] === "boolean" ? { capture: args.shift(), once: false, passive: false } : args.shift());
 		const wrapper = function(aEvent) {
 			if (filter) {
 				const target = event.target;
 				if (typeof target.is === "function" && !aEvent.target.is(filter)) return true;
 			}
 			const result = handle.apply(null, arguments);
-			if (option.once) getEventHandles(aEvent.currentTarget).remove([aEvent.type], handle);
+			if (option.once) removeWrapper(this, wrapper);
 			return result;
 		};
 
-		getWrapperHandleMap(this).set(handle, wrapper);
+		getWrapperHandleMap(this).set(handle, { handle, wrapper: wrapper, events, option });
 
 		for (let event of events) {
 			this.addEventListener(event, wrapper, option);
@@ -44,11 +54,12 @@ const support = Extender("EventSupport", (Prototype) => {
 	};
 
 
-	Prototype.removeOn = function(handle) {
-		const wrapper = getWrapperHandleMap(this).get(handle);
-		this.removeEventListener(wrapper ? wrapper : handle);
-		if (wrapper)
-			getWrapperHandleMap(this).delete(handle);
+	Prototype.removeOn = function(handle, event, capture) {
+		const data = getWrapperHandleMap(this).get(handle);
+		if (data) 
+			removeWrapper(this, data);
+		else
+			this.removeEventListener(handle, event, capture);
 
 		return this;
 	};
