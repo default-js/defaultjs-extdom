@@ -17,7 +17,7 @@ const support = Extender("EventSupport", (Prototype) => {
 	};
 
 	const removeWrapper = (element, data, eventTypes) => {
-		const { wrapper, option, events } = data;
+		const { wrapper, option, events, handle } = data;
 		const capture = option.capture;
 		if(eventTypes){
 			eventTypes = typeof eventTypes === "string" ? eventTypes.split(EVENTSPLITER) : eventTypes;
@@ -28,14 +28,14 @@ const support = Extender("EventSupport", (Prototype) => {
 					events.splice(index, 1);
 				}
 				if(events.length == 0)				
-					getWrapperHandleMap(element).delete(wrapper.handle);
+					getWrapperHandleMap(element).delete(handle);
 			}
 			
 		}else{
 			for (let event of events) {
 				element.removeEventListener(event, wrapper, capture);
 			}
-			getWrapperHandleMap(element).delete(wrapper.handle);
+			getWrapperHandleMap(element).delete(handle);
 		}		
 	}
 

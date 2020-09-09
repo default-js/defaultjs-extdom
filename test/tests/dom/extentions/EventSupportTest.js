@@ -75,17 +75,18 @@ describe("EventSupport Test", () => {
 		let container = create("<div>").first();
 		try {
 			let handler = function(event) { };
-			container.on("test", handler);
-			container.removeOn("test");
-
+						
 			container.on("test", handler);
 			container.removeOn(handler);
+			expect(container.__wrapperhandlemap__.size).toBe(0);
 
 			container.on("test", handler);
 			container.removeOn(handler, "test");
+			expect(container.__wrapperhandlemap__.size).toBe(0);
 			
 			container.on(["test1", "test2", "test3"], handler);
-			container.removeOn(handler, ["test1", "test2", "test3"]);
+			container.removeOn(handler, ["test1", "test2", "test3"]);			
+			expect(container.__wrapperhandlemap__.size).toBe(0);
 		} catch (e) {
 			expect(e).toBeUndefined();
 		}
