@@ -2,7 +2,7 @@ import Extender from "../../utils/Extender";
 
 const DEFAULT_TIMEOUT = 100;
 const support = Extender("EventSupport", (Prototype) => {
-
+	const EVENTSPLITER = /(\s+)|(\s*,\s*)/;
 	const getWrapperHandleMap = (element) => {
 		if (!element.__wrapperhandlemap__)
 			element.__wrapperhandlemap__ = new Map();
@@ -16,21 +16,34 @@ const support = Extender("EventSupport", (Prototype) => {
 		return element.___EVENTTRIGGERTIMEOUTS___;
 	};
 
-	const removeWrapper = (element, data) => {
+	const removeWrapper = (element, data, eventTypes) => {
 		const { wrapper, option, events } = data;
 		const capture = option.capture;
-		for (let event of events) {
-			element.removeEventListener(event, wrapper, capture);
-		}
-
-		getWrapperHandleMap(element).delete(handle);
+		if(eventTypes){
+			eventTypes = typeof eventTypes === "string" ? eventTypes.split(EVENTSPLITER) : eventTypes;
+			for (let event of eventTypes) {
+				const index = events.indexOf(event);
+				if(index >= 0) {
+					element.removeEventListener(event, wrapper, capture);
+					events.splice(index, 1);
+				}
+				if(events.length == 0)				
+					getWrapperHandleMap(element).delete(wrapper.handle);
+			}
+			
+		}else{
+			for (let event of events) {
+				element.removeEventListener(event, wrapper, capture);
+			}
+			getWrapperHandleMap(element).delete(wrapper.handle);
+		}		
 	}
 
 	Prototype.on = function() {
 		if (arguments.length < 2) throw new Error("Too less arguments!");
 
 		const args = Array.from(arguments);
-		let events = typeof args[0] === "string" ? args.shift().split(/(\s+)|(\s*,\s*)/) : args.shift();
+		let events = typeof args[0] === "string" ? args.shift().split(EVENTSPLITER) : args.shift();
 		const filter = typeof args[0] === "string" ? args.shift() : null;
 		const handle = args.shift();
 		const option = typeof args[0] === "undefined" ? { capture: false, once: false, passive: false } : (typeof args[0] === "boolean" ? { capture: args.shift(), once: false, passive: false } : args.shift());
@@ -57,7 +70,7 @@ const support = Extender("EventSupport", (Prototype) => {
 	Prototype.removeOn = function(handle, event, capture) {
 		const data = getWrapperHandleMap(this).get(handle);
 		if (data) 
-			removeWrapper(this, data);
+			removeWrapper(this, data, event);
 		else
 			this.removeEventListener(handle, event, capture);
 

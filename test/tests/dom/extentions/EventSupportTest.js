@@ -45,7 +45,7 @@ describe("EventSupport Test", () => {
 			setTimeout(() => {
 				container.remove();
 				if (counter != 2) reject();
-				else resolve();				
+				else resolve();
 			}, 1000);
 		});
 	});
@@ -65,23 +65,32 @@ describe("EventSupport Test", () => {
 			setTimeout(() => {
 				container.remove();
 				if (counter != 2) reject();
-				else resolve();				
+				else resolve();
 			}, 1000);
 		});
 	});
 
 	it("test removeOn", () => {
-		let container = find("#remove-on");
-		let handler = function (event) {};
 
-		container.on("test", handler);
-		container.removeOn("test");
+		let container = create("<div>").first();
+		try {
+			let handler = function(event) { };
+			container.on("test", handler);
+			container.removeOn("test");
 
-		container.on("test", handler);
-		container.removeOn(handler);
+			container.on("test", handler);
+			container.removeOn(handler);
 
-		container.on("test", handler);
-		container.removeOn("test", handler);
+			container.on("test", handler);
+			container.removeOn(handler, "test");
+			
+			container.on(["test1", "test2", "test3"], handler);
+			container.removeOn(handler, ["test1", "test2", "test3"]);
+		} catch (e) {
+			expect(e).toBeUndefined();
+		}
+
+		container.remove();
 	});
 
 	it("test trigger with timeout", async () => {
@@ -124,7 +133,7 @@ describe("EventSupport Test", () => {
 			setTimeout(() => {
 				container.remove();
 				if (counter > 1) reject();
-				else resolve();				
+				else resolve();
 			}, 1000);
 		});
 	});
