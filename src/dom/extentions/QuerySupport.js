@@ -44,7 +44,7 @@ const support = Extender("QuerySupport", Prototype => {
 	};
 	
 	Prototype.is = function() {
-		if(this instanceof Document)
+		if(this instanceof Document || this instanceof DocumentFragment)
 			return false;		
 		else if(arguments.length == 1){
 			if(typeof arguments[0] === "string")
