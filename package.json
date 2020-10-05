@@ -45,5 +45,11 @@
 		"src": "src",
 		"test": "test"
 	},
-	"dependencies": {}
+	"dependencies": {},
+	"files": [
+		"index.js",
+		"src/**",
+		"LICENSE",
+		"README.md"
+	]
 }
