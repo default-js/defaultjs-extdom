@@ -62,20 +62,26 @@ const support = Extender("QuerySupport", Prototype => {
 		return false;
 	};	
 	
-	Prototype.parent = function() {
+	Prototype.parent = function(selector, ignoreShadowRoot) {		
 		if(!this.parentNode)
-			return undefined;		
-		else if(typeof arguments[0] === "string"){
-			let parent = this.parentNode;
+			return null;		
+		ignoreShadowRoot = typeof selector === "boolean" ? selector : ignoreShadowRoot;
+		selector = typeof selector === "string" ? selector : null;
+		
+		let parent = this.parentNode;		
+		if(parent instanceof ShadowRoot && ignoreShadowRoot)
+			parent = parent.host;
+						
+		if(selector){
 			try{
-				while(parent && !parent.is(arguments[0]))
-					parent = parent.parent(arguments[0]);
+				while(parent && !parent.is(selector))
+					parent = parent.parent(selector, ignoreShadowRoot);
 			}catch (e) {
 				console.error("this:", this, "parent:", parent, "error:", e);
 			}
 			return parent;
 		}
-		return this.parentNode;
+		return parent;
 	};
 	
 	Prototype.parents = function() {		

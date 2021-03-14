@@ -5,3 +5,4 @@ import "./ParentsTest";
 import "./SelectorTest";
 import "./ClosestTest";
 import "./NestedTest.js";
+import "./ShadowRootParentTest.js";

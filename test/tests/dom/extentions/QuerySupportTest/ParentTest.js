@@ -13,7 +13,7 @@ describe("QuerySupport Tests", function() {
 		
 		done();
 	});
-	
+		
 	it("parent(div) (matching parent - 1 level)", function(done){
 		let element = find("#id-1-2-1").first();
 		expect(element).toBeDefined();
