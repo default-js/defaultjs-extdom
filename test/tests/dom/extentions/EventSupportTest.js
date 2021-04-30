@@ -139,6 +139,23 @@ describe("EventSupport Test", () => {
 		});
 	});
 
+
+	it("test trigger with event.detail data", async () => {
+		const container = create("<div><button></button></div>").first();
+		const button = container.find("button").first();
+
+		const promise = new Promise((resolve, reject) => {			
+			button.on("test", (event) => {
+				expect(event.detail).toBeTrue();
+				resolve();
+			});
+		});		
+
+		button.trigger( "test", true);
+
+		return promise;
+	});
+
 	afterAll(() => {
 		container.remove();
 	});
