@@ -3,6 +3,6 @@ import "./IsTest";
 import "./ParentTest";
 import "./ParentsTest";
 import "./SelectorTest";
-import "./ClosestTest";
+import "./ClosestsTest";
 import "./NestedTest.js";
 import "./ShadowRootParentTest.js";
