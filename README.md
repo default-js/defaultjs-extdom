@@ -247,7 +247,7 @@ Param       | Required | Default | Description
 `callback`  | x        |         | `function`
 `option`    |          |         | `boolean` for capture event or `object` like `{ capture: false, once: false, passive: false }`
 
-> **Info:** `eventname` can also be a string of space-sapareted event name
+> **Info:** `eventname` can also be a string of space-sapareted event names
 
 ```javascript
 element.on("click", (event) => {});
