@@ -26,6 +26,26 @@
       - [`on(eventname, callback, option)`](#oneventname-callback-option)
       - [`removeOn(callback, eventname, capture)`](#removeoncallback-eventname-capture)
       - [`trigger(event [,delegateEvent] [, data])`](#triggerevent-delegateevent--data)
+    - [additional manipulation support](#additional-manipulation-support)
+      - [`empty()`](#empty)
+      - [`content()`](#content)
+      - [`html(option)`](#htmloption)
+      - [`append(option)`](#appendoption)
+      - [`preppend(option)`](#preppendoption)
+      - [`replace(a [, b])`](#replacea--b)
+      - [`after(element)`](#afterelement)
+      - [`before(element)`](#beforeelement)
+    - [show / hide support](#show--hide-support)
+      - [`show()`](#show)
+      - [`hide()`](#hide)
+      - [`toggleShow()`](#toggleshow)
+    - [Extended functiality of `NodeList` and `HTMLCollection`](#extended-functiality-of-nodelist-and-htmlcollection)
+      - [`forEach((element, index)=>{})`](#foreachelement-index)
+      - [`map((element)=>{})`](#mapelement)
+      - [`filter((element)=>{})`](#filterelement)
+      - [`first()`](#first)
+      - [`last()`](#last)
+      - [delegate function call](#delegate-function-call)
   - [License](#license)
 
 ## Intro
@@ -300,7 +320,216 @@ element.on("click", (event) => {
 });
 ```
 
-@TODO
+### additional manipulation support
+
+#### `empty()`
+
+This function removes all nodes of element.
+
+Param | Required | Default | Description
+------|----------|---------|--------
+
+```javascript
+element.empty();
+```
+
+#### `content()`
+
+This function equal to `childNodes`.
+
+Param           | Required | Default | Description
+----------------|----------|---------|--------
+
+```javascript
+element.content() == event.childNodes;
+```
+
+#### `html(option)`
+
+Param           | Required | Default | Description
+----------------|----------|---------|--------
+`option`        |          |         | `boolean`, `string`, `Node`, `NodeList` or `HTMLCollection`
+
+- **`option` is not set, `undefined`, `null` or `false`**
+
+  The function returns the inner html like `innerHtml`
+
+- **`option` is `true`**
+  
+  The function returns the outer html like `outerHtml`
+
+- **`option` is `string`, `Node`, `NodeList` or `HTMLCollection`**
+
+  The function cleanup content and append option.
+
+```javascript
+element.html();
+element.html(true);
+element.html("<div></div>");
+element.html(otherElement);
+element.html(nodeList);
+element.html(htmlCollection);
+```
+
+#### `append(option)`
+
+This function append element(s).
+
+Param           | Required | Default | Description
+----------------|----------|---------|--------
+`option`        |          |         | `string`, `Node`, `NodeList` or `HTMLCollection`
+
+```javascript
+element.append("<div></div>");
+element.append(otherElement);
+element.append(nodeList);
+element.append(htmlCollection);
+```
+
+#### `preppend(option)`
+
+This function preppend element(s).
+
+Param           | Required | Default | Description
+----------------|----------|---------|--------
+`option`        |          |         | `string`, `Node`, `NodeList` or `HTMLCollection`
+
+```javascript
+element.preppend("<div></div>");
+element.preppend(otherElement);
+element.preppend(nodeList);
+element.preppend(htmlCollection);
+```
+
+#### `replace(a [, b])`
+
+This function repace a element.
+
+Param  | Required | Default | Description
+-------|----------|---------|--------
+`a`    | x        |         | `Node`
+`b`    |          |         | `Node`
+
+```javascript
+element.replace(otherElement); // element would be replaced by otherElement
+parent.preppend(elementA, elementB);// elementA must be child of parent, than elementA would be replaced by elementB
+```
+
+#### `after(element)`
+
+This function insert element after.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+`element` | x        |         | `string`, `Node`, `NodeList` or `HTMLCollection`
+
+```javascript
+element.after("<div></div>");
+element.after(otherElement);
+element.after(nodeList);
+element.after(htmlCollection);
+```
+
+#### `before(element)`
+
+This function insert element before.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+`element` | x        |         | `string`, `Node`, `NodeList` or `HTMLCollection`
+
+```javascript
+element.before("<div></div>");
+element.before(otherElement);
+element.before(nodeList);
+element.before(htmlCollection);
+```
+
+### show / hide support
+
+#### `show()`
+
+This function showing an element.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+
+```javascript
+element.show();
+```
+
+#### `hide()`
+
+This function hiding an element.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+
+```javascript
+element.hide();
+```
+
+#### `toggleShow()`
+
+This function switching between `show()` and `hide()`
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+
+```javascript
+element.toggleShow();
+```
+
+### Extended functiality of `NodeList` and `HTMLCollection`
+
+Both classes `NodeList` and `HTMLCollection` has more funtionality by adding same functions of `Array` and more.
+
+#### `forEach((element, index)=>{})`
+
+See `Array.prototype.foreach`;
+
+#### `map((element)=>{})`
+
+See `Array.prototype.map`;
+
+#### `filter((element)=>{})`
+
+See `Array.prototype.filter`;
+
+#### `first()`
+
+Retures the first element.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+
+```javascript
+nodeList.first();
+find("div").first(); //find returns a NodeList with all div's and by .first() returns only the first element
+```
+
+#### `last()`
+
+Retures the last element.
+
+Param     | Required | Default | Description
+----------|----------|---------|--------
+
+```javascript
+nodeList.last();
+find("div").first(); //find returns a NodeList with all div's and by .last() returns only the last element
+```
+
+#### delegate function call
+
+At `NodeList` and `HTMLCollection` you can call any function of `HTMLElement` and `HTMLInputElement` except functions there availabe on `NodeList` or `HTMLCollection`.
+
+```javascript
+nodeList.show();
+// same like
+for(element of nodeList)
+  element.show();
+```
 
 ## License
 
