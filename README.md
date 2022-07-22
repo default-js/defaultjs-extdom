@@ -24,6 +24,8 @@
       - [`toggleClass(classname [, classname, ...])`](#toggleclassclassname--classname-)
     - [additional event support](#additional-event-support)
       - [`on(eventname, callback, option)`](#oneventname-callback-option)
+      - [`removeOn(callback, eventname, capture)`](#removeoncallback-eventname-capture)
+      - [`trigger(event [,delegateEvent] [, data])`](#triggerevent-delegateevent--data)
   - [License](#license)
 
 ## Intro
@@ -255,6 +257,47 @@ element.on("click focus", (event) => {});
 element.on(["click","focus"], (event) => {});
 element.on("click", (event) => {}, true);
 element.on("click", (event) => {}, { capture: true, once: true, passive: true });
+```
+
+#### `removeOn(callback, eventname, capture)`
+
+This function is sort for `removeEventListener`.
+
+Param       | Required | Default | Description
+------------|----------|---------|--------
+`callback`  | x        |         | `function`
+`eventname` |          |         | `string` or `array` of event name(s)
+`capture`   |          |         | `boolean`
+
+```javascript
+const handle = (event) => {};
+element.on("click", handle);
+element.on("click focus", handle);
+
+element.removeOn(handle, "click"); //removes handle only for click event
+element.removeOn(handle, "fokus");//removes handle only for click event
+
+element.on("click focus", handle);
+element.removeOn(handle);//removes handle for all events
+```
+
+#### `trigger(event [,delegateEvent] [, data])`
+
+This function is sort for `removeEventListener`.
+
+Param           | Required | Default | Description
+----------------|----------|---------|--------
+`event`         | x        |         | `function`
+`delegateEvent` |          |         | `event` to be delegate `data`          |          |         | `boolean`
+
+```javascript
+element.trigger("click");
+element.trigger("click", {name: "my-data"});
+
+element.on("click", (event) => {
+  element.trigger("change", event);
+  element.trigger("change", event, {name: "my-data"});
+});
 ```
 
 @TODO
