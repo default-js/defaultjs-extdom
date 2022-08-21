@@ -1,5 +1,3 @@
-import Utils from "@test/helpers/Utils";
-
 const selectorTest = function(aSelector){
 	let expected = find(aSelector).first();
 	let selector = expected.selector();

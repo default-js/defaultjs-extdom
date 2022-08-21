@@ -1,4 +1,4 @@
-import Utils from "@test/helpers/Utils";
+import Utils from "../../../helpers/Utils";
 
 describe("AttributeSupport Tests", function() {
 	beforeAll(function(done){

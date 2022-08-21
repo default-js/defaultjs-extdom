@@ -1,5 +1,3 @@
-import Utils from "@test/helpers/Utils";
-
 describe("QuerySupport Tests", () => {
 	beforeAll(async () => {
 		window.document.body.innerHTML = window.__html__["test/sites/QuerySupportTest.html"];

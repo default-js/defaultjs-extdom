@@ -1,6 +1,6 @@
-/.settings/
-/.project
-/node_modules/
+runtime
+target
+node_modules
 
 
 # Logs
@@ -67,3 +67,4 @@ typings/
 
 # eclipse
 .project
+.settings

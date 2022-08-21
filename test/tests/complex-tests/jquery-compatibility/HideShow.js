@@ -1,6 +1,6 @@
 describe("hide show tests - ", function() {
 	beforeAll(async () => {
-		return script("/static/jquery-2.2.4.min.js");
+		return await script("/static/jquery-2.2.4.min.js");
 	});
 	
 	it("$.hide test", async () => {	

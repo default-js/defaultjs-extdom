@@ -5,33 +5,35 @@
 	"description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
 	"main": "js/index.js",
 	"scripts": {
-		"build:only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
-		"build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
-		"//dev:live": "webpack-dev-server --open --config webpack.dev-server.js && npm run test:live",
-		"dev:live": "webpack-dev-server --open --config webpack.dev-server.js",
-		"test:live": "karma start karma.live.js",
-		"test:integration": "karma start karma.integration.js",
-		"test": "karma start karma.test.js"
+		"build:dev": "webpack --mode=development --progress",
+		"build:prod": "webpack --mode=production --progress",
+		"build": "npm run test && npm run build:dev && npm run build:prod",
+		"dev": "webpack serve --mode=development --progress",
+		"test:live": "karma start --auto-watch",
+		"test": "karma start --no-auto-watch"
 	},
 	"keywords": [],
 	"author": "Frank Schüler",
 	"license": "MIT",
 	"devDependencies": {
-		"karma": "^5.2.2",
+		"clean-webpack-plugin": "^1.0.1",
+		"copy-webpack-plugin": "^11.0.0",
+		"http-server": "^14.1.0",
+		"karma": "^6.3.4",
 		"karma-chrome-launcher": "^3.1.0",
 		"karma-coverage": "^2.0.3",
-		"karma-firefox-launcher": "^1.3.0",
+		"karma-firefox-launcher": "^2.1.1",
 		"karma-html2js-preprocessor": "^1.1.0",
 		"karma-jasmine": "^4.0.1",
 		"karma-safari-launcher": "^1.0.0",
 		"karma-sourcemap-loader": "^0.3.8",
-		"karma-webpack": "^4.0.2",
-		"puppeteer": "^2.1.1",
+		"karma-webpack": "^5.0.0",
+		"puppeteer": "^16.1.1",
 		"replace-in-file-webpack-plugin": "^1.0.6",
-		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12",
-		"webpack-dev-server": "^3.11.0",
-		"webpack-merge": "^4.2.2"
+		"terser-webpack-plugin": "^5.3.1",
+		"webpack": "^5.74.0",
+		"webpack-cli": "^4.10.0",
+		"webpack-dev-server": "^4.7.4"
 	},
 	"repository": {
 		"type": "git",
@@ -49,6 +51,7 @@
 	"files": [
 		"index.js",
 		"src/**",
+		"dist/**",
 		"LICENSE",
 		"README.md"
 	]

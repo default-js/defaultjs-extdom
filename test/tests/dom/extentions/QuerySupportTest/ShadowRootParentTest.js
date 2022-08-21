@@ -1,4 +1,4 @@
-import { domId } from "@test/helpers/Utils";
+import { domId } from "../../../../helpers/Utils";
 
 
 customElements.define("test-query-support-shadow-element-1", class extends HTMLElement {

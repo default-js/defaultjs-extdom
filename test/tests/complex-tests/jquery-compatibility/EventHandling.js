@@ -1,6 +1,6 @@
 describe("JQuery compatibility Tests", function() {
 	beforeAll(async () => {
-		return script("/static/jquery-2.2.4.min.js");
+		return await script("/static/jquery-2.2.4.min.js");
 	});
 	
 	it("event test 1 -> event triggered by jquery", async () => {
