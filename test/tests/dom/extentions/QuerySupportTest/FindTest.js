@@ -57,6 +57,39 @@ describe("QuerySupport Tests", function() {
 		expect(element.first()).toBe(expected);
 		done();
 	});
+
+	it("find(:parent ) - multible cases", async () => {
+		const content = create(`<div selector-test-parent>
+				<div>
+					<span></span>
+				</div>
+				<p></p>
+			</div>`).first();
+		document.body.appendChild(content);
+
+		const span = content.find("span").first();
+		const p = content.find("p").first();
+		
+		let result = span.find(":parent( \"[selector-test-parent]\" ) p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent(\"[selector-test-parent]\") p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent('[selector-test-parent]') p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent( [selector-test-parent] ) p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent([selector-test-parent]) p").first();	
+		expect(result).toBe(p);
+		result = span.find(":parent([selector-test-parent]:not(p) ) p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent(\"[selector-test-parent]:not(p[data=\"test\"]) \" ) p").first();		
+		expect(result).toBe(p);
+		result = span.find(":parent('[selector-test-parent]:not(p[data=\"test\"]) ') p").first();		
+		expect(result).toBe(p);
+
+
+		content.remove();
+	});
 	
 	
 	afterAll(function(done){

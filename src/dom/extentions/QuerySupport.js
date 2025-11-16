@@ -1,6 +1,25 @@
 import Extender from "../../utils/Extender";
 
-const parentSelector = /:parent(\(\"([^\)]*)\"\))?/i;
+//const parentSelector = /:parent(\(\s*"?\s*([^\)"]*)\s*"?\s*\))?/i;
+const parentSelector = /:parent(\(\s*(.*)\s*\))?/i;
+/**
+ * @param {string} subquery 
+ */
+const cleanupSubSelector = (subquery) => {
+	if(typeof subquery !== "string") return null;
+	subquery = subquery.trim();
+	if((subquery.startsWith('"') && subquery.endsWith('"'))
+		|| (subquery.startsWith("'") && subquery.endsWith("'")))
+		subquery = subquery.substring(1, subquery.length -1);
+	return subquery.trim();
+};
+
+/**
+ * 
+ * @param {HTMLElement} aElement 
+ * @param {string} aSelector 
+ * @returns {NodeList}
+ */
 const queryExecuter = function (aElement, aSelector) {
 	let match = parentSelector.exec(aSelector);
 	if (match) {
@@ -9,7 +28,7 @@ const queryExecuter = function (aElement, aSelector) {
 			result = aElement.querySelectorAll(aSelector.substr(0, match.index));
 			if (result.length == 0) return;
 		}
-		result = result.parent(match[2]);
+		result = result.parent(cleanupSubSelector(match[2]));
 		if (result) {
 			let nextSelector = aSelector.substr(match.index + match[0].length).trim();
 			if (nextSelector.length > 0) result = result.find(nextSelector);
