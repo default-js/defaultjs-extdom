@@ -156,6 +156,38 @@ describe("EventSupport Test", () => {
 		return promise;
 	});
 
+	it("test trigger with event.detail = 0", async () => {
+		const container = create("<div><button></button></div>").first();
+		const button = container.find("button").first();
+
+		const promise = new Promise((resolve, reject) => {			
+			button.on("test", (event) => {
+				expect(event.detail).toBe(0);
+				resolve();
+			});
+		});		
+
+		button.trigger( "test", 0);
+
+		return promise;
+	});
+
+	it("test trigger with event.detail = false", async () => {
+		const container = create("<div><button></button></div>").first();
+		const button = container.find("button").first();
+
+		const promise = new Promise((resolve, reject) => {			
+			button.on("test", (event) => {
+				expect(event.detail).toBe(false);
+				resolve();
+			});
+		});		
+
+		button.trigger( "test", false);
+
+		return promise;
+	});
+
 	afterAll(() => {
 		container.remove();
 	});

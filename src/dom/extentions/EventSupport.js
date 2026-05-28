@@ -88,7 +88,7 @@ const support = Extender("EventSupport", (Prototype) => {
 			const type = args.shift();
 			const delegate = args[0] instanceof Event ? args.shift() : null;
 			const data = args.length >= 1 ? (args.length == 1 ? args.shift() : args) : delegate;
-			const event = data ? new CustomEvent(type, { bubbles: true, cancelable: true, composed: true, detail: data }) : new Event(type, { bubbles: true, cancelable: true, composed: true });
+			const event = new CustomEvent(type, { bubbles: true, cancelable: true, composed: true, detail: data });
 
 			if (delegate) event.delegatedEvent = delegate;
 			this.dispatchEvent(event);
