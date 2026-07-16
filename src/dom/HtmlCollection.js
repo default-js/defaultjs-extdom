@@ -31,8 +31,8 @@ HTMLCollection.prototype.val = function() {
 			this.forEach(node => {
 				if(typeof node.val === "function"){
 					const value = node.val();
-					if(value)
-						result.set((node.name || node.id || node.selector()), node.val());
+					if(value != null)
+						result.set((node.name || node.id || node.selector()), value);
 				}
 			});	
 			return result;
