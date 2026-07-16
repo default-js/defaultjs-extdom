@@ -40,6 +40,39 @@ describe("ManipulationSupportTest Prepend", function() {
 		container.remove();
 	});
 	
+	it("prepend string into empty container", function(){
+		let container = window.create("<div id=\"" + Utils.domId() + "\"></div>").first();
+		container.prepend("<div>test-1</div>");
+
+		expect(container.content().length).toBe(1);
+		expect(container.content().first().textContent).toBe("test-1");
+		container.remove();
+	});
+
+	it("prepend string into filled container", function(){
+		let container = window.create("<div id=\"" + Utils.domId() + "\"><div></div></div>").first();
+		let element = container.content().first();
+		container.prepend("<div>test-1</div>");
+
+		expect(container.content().length).toBe(2);
+		expect(container.content().first().textContent).toBe("test-1");
+		expect(container.content().last()).toBe(element);
+		container.remove();
+	});
+
+	it("prepend string of multible nodes into filled container", function(){
+		let container = window.create("<div id=\"" + Utils.domId() + "\"><div></div></div>").first();
+		let element = container.content().first();
+		container.prepend("<div>test-1</div><div>test-2</div><div>test-3</div>");
+
+		expect(container.content().length).toBe(4);
+		expect(container.content()[0].textContent).toBe("test-1");
+		expect(container.content()[1].textContent).toBe("test-2");
+		expect(container.content()[2].textContent).toBe("test-3");
+		expect(container.content().last()).toBe(element);
+		container.remove();
+	});
+
 	afterAll(function(done){
 		done();
 	});

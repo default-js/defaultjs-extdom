@@ -1,7 +1,19 @@
 import Extender from "../../utils/Extender";
 import Utils from "../../utils/Utils";
 
-const support = Extender("ManipulationSupport", Prototype => {	
+/**
+ * Content accepted by the insert functions. Strings are parsed to nodes by the
+ * global create() function, lists are inserted item by item.
+ *
+ * @typedef {Node|NodeList|HTMLCollection|Node[]|string} Content
+ */
+
+const support = Extender("ManipulationSupport", Prototype => {
+	/**
+	 * Removes all child nodes.
+	 *
+	 * @returns {Node} this
+	 */
 	Prototype.empty = function(){
 		let nodes = this.childNodes
 		while(nodes.length != 0)			
@@ -10,10 +22,22 @@ const support = Extender("ManipulationSupport", Prototype => {
 		return this;
 	};
 	
+	/**
+	 * @returns {NodeList} the live list of child nodes
+	 */
 	Prototype.content = function(){
 		return this.childNodes;
 	};	
 	
+	/**
+	 * Gets or sets the markup of this node.
+	 *
+	 * html() returns the innerHTML, html(true) the outerHTML and html(false) the
+	 * innerHTML. Any other argument replaces all children by the given content.
+	 *
+	 * @param {...(boolean|Content)} content - null or undefined throws
+	 * @returns {string|Node} the markup, or this when content was set
+	 */
 	Prototype.html = function(){
 		if(arguments.length == 0)			
 			return this.innerHTML;
@@ -22,19 +46,20 @@ const support = Extender("ManipulationSupport", Prototype => {
 				return this.outerHTML;
 			else
 				return this.innerHTML;
-		else 
-			Array.from(arguments).forEach(content => {
-				this.empty();
-				if(typeof content === "string")
-					this.append(content);
-				else if(content instanceof Node || content instanceof NodeList || content instanceof HTMLCollection){
-					this.append(content);
-				}
-			});		
+		else {			
+			this.empty();
+			for(let i = 0; i < arguments.length; i++)
+				this.append(arguments[i]);		
+		}
 			
 		return this;
 	};
 	
+	/**
+	 * Appends the content as last children.
+	 *
+	 * @param {...Content} content
+	 */
 	const append = function(){
 		const append = Prototype.appendChild.bind(this);
 		for(let i = 0; i < arguments.length; i++){
@@ -49,9 +74,19 @@ const support = Extender("ManipulationSupport", Prototype => {
 	};	
 	Prototype.append = append;
 	
+	/**
+	 * @param {Node} aFirstElement - the node to insert before
+	 * @param {Node} aElement - the node to insert
+	 */
 	const prepend = function(aFirstElement, aElement){
 		this.insertBefore(aElement, aFirstElement);
 	};
+
+	/**
+	 * Inserts the content as first children.
+	 *
+	 * @param {...Content} content
+	 */
 	Prototype.prepend = function(){
 		if(this.childNodes.length == 0)
 			append.apply(this, arguments);
@@ -63,13 +98,23 @@ const support = Extender("ManipulationSupport", Prototype => {
 				if(arg instanceof Node)
 					insert(arg);
 				else if(typeof arg === "string")
-					arg.forEach(insert);
+					create(arg).forEach(insert);
 				else if(typeof arg.forEach === "function")
 					arg.forEach(insert);
 			}
 		}
 	};
 	
+	/**
+	 * Replaces a node by the given content.
+	 *
+	 * Called with one argument, this node is replaced within its parent node.
+	 * Called with two arguments, the first one - a child of this node - is
+	 * replaced by the second one.
+	 *
+	 * @param {...Content} content - the new content, or the old node followed by the new content
+	 * @throws {Error} when called without arguments
+	 */
 	Prototype.replace = function(){
 		if(arguments.length < 1)
 			throw new Error("Insufficient arguments! One or two nodes required!");
@@ -86,6 +131,12 @@ const support = Extender("ManipulationSupport", Prototype => {
 			parent.replaceChild(newNode,oldNode);
 	};
 	
+	/**
+	 * Inserts the content directly after this node.
+	 *
+	 * @param {...Content} content
+	 * @throws {Error} when this node has no parent node
+	 */
 	Prototype.after = function(){
 		if(this.parentNode == null)
 			throw new Error("Can't insert nodes after this node! Parent node not available!");
@@ -98,20 +149,26 @@ const support = Extender("ManipulationSupport", Prototype => {
 			Prototype.append.apply(parent, arguments);
 	};	
 	
+	/**
+	 * Inserts the content directly before this node.
+	 *
+	 * @param {...Content} content
+	 * @throws {Error} when this node has no parent node
+	 */
 	Prototype.before = function(){
 		if(this.parentNode == null)
 			throw new Error("Can't insert nodes after this node! Parent node not available!");
 		
 		const parent = this.parentNode;
-		const inserter = (node) => {parent.insertBefore(node, this);}
+		const insert = (node) => {parent.insertBefore(node, this);}
 		for(let i = 0; i < arguments.length; i++){
 			const arg = arguments[i];
 			if(arg instanceof Node)
-				inserter(arg);
+				insert(arg);
 			else if(typeof arg === "string")
-				arg.forEach(inserter);
+				create(arg).forEach(insert);
 			else if(typeof arg.forEach === "function")
-				arg.forEach(inserter);
+				arg.forEach(insert);
 		}
 	};	
 });
