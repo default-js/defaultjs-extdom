@@ -72,8 +72,63 @@ describe("DataSupport Tests", () => {
 		expect(element.attr("data-test-1")).toBe("value-1");		
 	});	
 	
+	it("data(true) reloads values added to the dom", async () => {
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+		expect(element.data()).toEqual({"test-1" : "value-1"});
+
+		element.attr("data-test-2", "value-2");
+		expect(element.data()).toEqual({"test-1" : "value-1"});
+		expect(element.data(true)).toEqual({"test-1" : "value-1", "test-2" : "value-2"});
+	});
+
+	it("data(true) reloads values changed in the dom", async () => {
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+		element.data();
+
+		element.attr("data-test-1", "value-2");
+		expect(element.data(true)).toEqual({"test-1" : "value-2"});
+	});
+
+	it("data(true) keeps values removed from the dom", async () => {
+		let element = create("<div data-test-1=\"value-1\" data-test-2=\"value-2\"></div>").first();
+		element.data();
+
+		element.attr("data-test-1", null);
+		expect(element.data(true)).toEqual({"test-1" : "value-1", "test-2" : "value-2"});
+	});
+
+	it("data(true) keeps values never been in the dom", async () => {
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+		element.data("test-2", "value-2");
+
+		expect(element.data(true)).toEqual({"test-1" : "value-1", "test-2" : "value-2"});
+	});
+
+	it("data(false) does not reload", async () => {
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+		element.data();
+
+		element.attr("data-test-2", "value-2");
+		expect(element.data(false)).toEqual({"test-1" : "value-1"});
+	});
+
+	it("data() throws by a first argument beside string and boolean", async () => {
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+
+		expect(() => element.data(0)).toThrow();
+		expect(() => element.data({})).toThrow();
+	});
+
+	it("data() does not write to the global name", async () => {
+		window.name = "my-window";
+		let element = create("<div data-test-1=\"value-1\"></div>").first();
+		element.data();
+
+		expect(window.name).toBe("my-window");
+	});
+
 	afterAll(async () => {
 		window.document.body.innerHTML = "";
-		
+
 	});
 });
