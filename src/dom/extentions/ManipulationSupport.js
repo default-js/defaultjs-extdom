@@ -112,7 +112,9 @@ const support = Extender("ManipulationSupport", Prototype => {
 	 * Called with two arguments, the first one - a child of this node - is
 	 * replaced by the second one.
 	 *
-	 * @param {...Content} content - the new content, or the old node followed by the new content
+	 * Unlike the other insert functions this one does not accept html strings.
+	 *
+	 * @param {...(Node|NodeList|HTMLCollection|Node[])} content - the new content, or the old node followed by the new content
 	 * @throws {Error} when called without arguments
 	 */
 	Prototype.replace = function(){

@@ -17,10 +17,10 @@ HTMLCollection.prototype.applyTo = function(){
 		else if(typeof node[calling] === "function")
 			result = node[calling].apply(node, args);
 		
-		if(result)
+		if(result != null)
 			results.push(result);
 	}
-	
+
 	return results;
 };
 
@@ -72,7 +72,7 @@ DelegaterBuilder(function(aFunctionName, theArguments) {
 	this.forEach(node => {
 		if(node && typeof node[aFunctionName] === "function"){
 			let result = node[aFunctionName].apply(node, theArguments);
-			if(result){ 
+			if(result != null){
 				if(result instanceof HTMLCollection)
 					results = results.concat(Array.from(result));
 				else
