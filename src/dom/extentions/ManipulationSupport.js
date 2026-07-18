@@ -44,7 +44,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 	 * @returns {Node} this
 	 */
 	Prototype.empty = function(){
-		let nodes = this.childNodes
+		const nodes = this.childNodes;
 		while(nodes.length != 0)			
 			nodes[0].remove(true);
 		

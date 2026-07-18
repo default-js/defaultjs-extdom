@@ -52,10 +52,10 @@ HTMLCollection.from = function(){
 		if(typeof arg !== "undefined" && arg != null){
 			if(arg instanceof HTMLElement)
 				data[counter++] = {value: arg, enumerable: true};
-			else if(arg instanceof HTMLCollection || arg instanceof NodeList || arg instanceof Array){
-				for(let i = 0; i < arg.length; i++){
-					if(arg[i] && arg[i] instanceof HTMLElement){
-						data[counter++] = {value: arg[i], enumerable: true};
+			else if(typeof arg[Symbol.iterator] === 'function'){
+				for(let item of arg){
+					if(item instanceof HTMLElement){
+						data[counter++] = {value: item, enumerable: true};
 					}
 				}
 			}

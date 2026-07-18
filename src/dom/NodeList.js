@@ -52,10 +52,10 @@ NodeList.from = function(){
 		if(typeof arg !== "undefined" && arg != null){
 			if(arg instanceof Node)
 				data[counter++] = {value: arg, enumerable: true};
-			else if(arg instanceof NodeList || arg instanceof HTMLCollection || arg instanceof Array){
-				for(let i = 0; i < arg.length; i++){
-					if(arg[i] && arg[i] instanceof Node){
-						data[counter++] = {value: arg[i], enumerable: true};
+			else if(typeof arg[Symbol.iterator] === 'function'){
+				for(let item of arg){
+					if(item instanceof Node){
+						data[counter++] = {value: item, enumerable: true};
 					}
 				}
 			}

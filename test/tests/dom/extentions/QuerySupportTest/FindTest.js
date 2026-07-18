@@ -92,6 +92,72 @@ describe("QuerySupport Tests", function() {
 	});
 	
 	
+	it("find(:parent) with a nested bracket group", async () => {
+		const content = create(`<div class="root" data-nested><div><p></p><span></span></div></div>`).first();
+		document.body.appendChild(content);
+
+		const span = content.find("span").first();
+
+		expect(span.find(":parent(div:has(p):not(span))").first()).toBe(span.parentElement);
+		expect(span.find(":parent([data-nested]:has(span))").first()).toBe(content);
+
+		content.remove();
+	});
+
+	it("find(:parent) followed by a bracket group", async () => {
+		const content = create(`<div data-followed><span></span><p class="target"></p></div>`).first();
+		document.body.appendChild(content);
+
+		const span = content.find("span").first();
+		const target = content.find("p").first();
+
+		expect(span.find(":parent p:not(.x)").first()).toBe(target);
+		expect(span.find(":parent([data-followed]) p:not(.x)").first()).toBe(target);
+
+		content.remove();
+	});
+
+	it("find(:parent) with a bracket inside a string", async () => {
+		const content = create(`<div data-bracket="a)b"><span></span></div>`).first();
+		document.body.appendChild(content);
+
+		const span = content.find("span").first();
+
+		expect(span.find(":parent([data-bracket=\"a)b\"])").first()).toBe(content);
+
+		content.remove();
+	});
+
+	it("find(:parent) without a bracket group returns the parent", async () => {
+		const content = create(`<div data-plain><span></span></div>`).first();
+		document.body.appendChild(content);
+
+		const span = content.find("span").first();
+
+		expect(span.find(":parent").first()).toBe(content);
+		expect(span.find(":parent()").first()).toBe(content);
+		expect(span.find(":parent(   )").first()).toBe(content);
+
+		content.remove();
+	});
+
+	it("find(:parent) ignores a token inside a string or a group", async () => {
+		const content = create(`<div data-token=":parent"><span></span></div>`).first();
+		document.body.appendChild(content);
+
+		expect(content.find("[data-token=\":parent\"]").length).toBe(0);
+		expect(document.find("[data-token=\":parent\"]").first()).toBe(content);
+
+		content.remove();
+	});
+
+	it("find(:parent) throws by an unclosed bracket group", async () => {
+		const content = create(`<div><span></span></div>`).first();
+		const span = content.find("span").first();
+
+		expect(() => span.find(":parent(div")).toThrowError("Invalid query!");
+	});
+
 	afterAll(function(done){
 		window.document.body.innerHTML = "";
 		done();
