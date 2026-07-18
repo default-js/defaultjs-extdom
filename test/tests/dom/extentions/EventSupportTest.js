@@ -71,25 +71,177 @@ describe("EventSupport Test", () => {
 	});
 
 	it("test removeOn", () => {
-
 		let container = create("<div>").first();
-		try {
-			let handler = function(event) { };
-						
-			container.on("test", handler);
-			container.removeOn(handler);
-			expect(container.__wrapperhandlemap__.size).toBe(0);
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
 
-			container.on("test", handler);
-			container.removeOn(handler, "test");
-			expect(container.__wrapperhandlemap__.size).toBe(0);
-			
-			container.on(["test1", "test2", "test3"], handler);
-			container.removeOn(handler, ["test1", "test2", "test3"]);			
-			expect(container.__wrapperhandlemap__.size).toBe(0);
-		} catch (e) {
-			expect(e).toBeUndefined();
-		}
+		container.on("test", handler);
+		container.removeOn(handler, "test");
+		container.trigger("test");
+		expect(counter).toBe(0);
+
+		container.on(["test1", "test2", "test3"], handler);
+		container.removeOn(handler, ["test1", "test2", "test3"]);
+		container.trigger("test1");
+		container.trigger("test2");
+		container.trigger("test3");
+		expect(counter).toBe(0);
+
+		container.remove();
+	});
+
+	it("test removeOn without events removes all events", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on(["test1", "test2", "test3"], handler);
+		container.removeOn(handler);
+
+		container.trigger("test1");
+		container.trigger("test2");
+		container.trigger("test3");
+		expect(counter).toBe(0);
+
+		container.remove();
+	});
+
+	it("test removeOn without events removes all registrations of a handle", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on(["test-a", "test-b"], handler);
+		container.on("test-c", handler);
+		container.removeOn(handler);
+
+		container.trigger("test-a");
+		container.trigger("test-b");
+		container.trigger("test-c");
+		expect(counter).toBe(0);
+
+		container.remove();
+	});
+
+	it("test on with an array of multiple event types per entry", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on(["test-a", "test-b test-c", "test-d,test-e"], handler);
+		container.trigger("test-a");
+		container.trigger("test-b");
+		container.trigger("test-c");
+		container.trigger("test-d");
+		container.trigger("test-e");
+		expect(counter).toBe(5);
+
+		container.remove();
+	});
+
+	it("test on throws by invalid event types", () => {
+		let container = create("<div>").first();
+		let handler = function(event) { };
+
+		expect(() => container.on([""], handler)).toThrow();
+		expect(() => container.on(["   "], handler)).toThrow();
+		expect(() => container.on(["test", ""], handler)).toThrow();
+		expect(() => container.on([null], handler)).toThrow();
+		expect(() => container.on([0], handler)).toThrow();
+		expect(() => container.on({}, handler)).toThrow();
+
+		container.remove();
+	});
+
+	it("test on with surrounding whitespaces", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on(" test-a test-b ", handler);
+		container.trigger("test-a");
+		container.trigger("test-b");
+		expect(counter).toBe(2);
+
+		container.remove();
+	});
+
+	it("test on throws by an empty array of event types", () => {
+		let container = create("<div>").first();
+		let handler = function(event) { };
+
+		expect(() => container.on([], handler)).toThrow();
+
+		container.remove();
+	});
+
+	it("test on throws by missing event types", () => {
+		let container = create("<div>").first();
+		let handler = function(event) { };
+
+		expect(() => container.on("", handler)).toThrow();
+		expect(() => container.on("   ", handler)).toThrow();
+		expect(() => container.on(null, handler)).toThrow();
+
+		container.remove();
+	});
+
+	it("test removeOn of one event only", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on(["test1", "test2"], handler);
+		container.removeOn(handler, "test1");
+
+		container.trigger("test1");
+		expect(counter).toBe(0);
+
+		container.trigger("test2");
+		expect(counter).toBe(1);
+
+		container.remove();
+	});
+
+	it("test removeOn of a handle used for multiple registrations", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on("test-a", handler);
+		container.on("test-b", handler);
+		container.removeOn(handler, ["test-a", "test-b"]);
+
+		container.trigger("test-a");
+		container.trigger("test-b");
+		expect(counter).toBe(0);
+
+		container.remove();
+	});
+
+	it("test removeOn of a handle registered by capture", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on("test", handler, true);
+		container.removeOn(handler, "test");
+
+		container.trigger("test");
+		expect(counter).toBe(0);
+
+		container.remove();
+	});
+
+	it("test on with option once", () => {
+		let container = create("<div>").first();
+		let counter = 0;
+		let handler = function(event) { counter = counter + 1; };
+
+		container.on("test", handler, { once: true });
+		container.trigger("test");
+		container.trigger("test");
+		expect(counter).toBe(1);
 
 		container.remove();
 	});
@@ -186,6 +338,46 @@ describe("EventSupport Test", () => {
 		button.trigger( "test", false);
 
 		return promise;
+	});
+
+	it("on with multiple events as string registers only the given events", () => {
+		const element = create("<div></div>").first();
+		let counter = 0;
+		const handler = function(event){ counter = counter + 1; };
+
+		element.on("test-a test-b", handler);
+		element.trigger("test-a");
+		element.trigger("test-b");
+		expect(counter).toBe(2);
+
+		element.trigger(" ");
+		element.trigger("undefined");
+		expect(counter).toBe(2);
+	});
+
+	it("on with multiple events separated by comma", () => {
+		const element = create("<div></div>").first();
+		let counter = 0;
+		const handler = function(event){ counter = counter + 1; };
+
+		element.on("test-a, test-b", handler);
+		element.trigger("test-a");
+		element.trigger("test-b");
+		expect(counter).toBe(2);
+	});
+
+	it("on with multiple events separated by comma and spaces", () => {
+		const element = create("<div></div>").first();
+		let counter = 0;
+		const handler = function(event){ counter = counter + 1; };
+
+		element.on("test-a , test-b", handler);
+		element.trigger("test-a");
+		element.trigger("test-b");
+		expect(counter).toBe(2);
+
+		element.trigger("");
+		expect(counter).toBe(2);
 	});
 
 	afterAll(() => {
