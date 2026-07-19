@@ -1,22 +1,24 @@
-import Utils from "./utils/Utils";
+import Utils, {GLOBAL} from "./utils/Utils";
+import { READYEVENT } from "./dom/extentions/ReadyEventSupport";
 
-Utils.global.defaultjs = Utils.global.defaultjs || {};
-Utils.global.defaultjs.extdom = Utils.global.defaultjs.extdom || {
+GLOBAL.defaultjs = GLOBAL.defaultjs || {};
+GLOBAL.defaultjs.extdom = GLOBAL.defaultjs.extdom || {
 	VERSION : "${version}",
+	READYEVENT : READYEVENT,
 	utils : {
 		Utils: Utils
 	}
 };
 
-Utils.global.find = function() {
+GLOBAL.find = function() {
 	return document.find.apply(document, arguments);
 };
 
-Utils.global.ready = function() {
+GLOBAL.ready = function() {
 	return document.ready.apply(document, arguments);
 };
 
-Utils.global.create = function(aContent, asTemplate) {
+GLOBAL.create = function(aContent, asTemplate) {
 	if (typeof arguments[0] !== "string")
 		throw new Error("The first argument must be a string!");
 	
@@ -28,9 +30,9 @@ Utils.global.create = function(aContent, asTemplate) {
 	return document.importNode(template.content, true).childNodes;
 };
 
-Utils.global.script = function(aFile, aTarget) {
+GLOBAL.script = function(aFile, aTarget) {
 	if(aFile instanceof Array)
-		return Promise.all(aFile.map(file => Utils.global.script(file, aTarget)));
+		return Promise.all(aFile.map(file => GLOBAL.script(file, aTarget)));
 	
 	if(typeof aFile === "string")	
 		return new Promise((r,e) => {

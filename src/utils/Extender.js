@@ -12,7 +12,7 @@ const Extender = function(aName, aExtention){
 			aExtention(aType.prototype);
 		}
 		else
-			console.warn("duplicated load of extension \"" + aName + "\"!");
+			console.warn(`Duplicated load of extension \"${aName}\"!`);
 	}
 };
 

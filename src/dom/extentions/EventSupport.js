@@ -63,7 +63,7 @@ const getTriggerTimeouts = (element) => {
  * @param {EventTarget} anElement
  * @param {Function} aHandle - the function given to on()
  * @param {Function} aWrapper - the listener actually added to the element
- * @param {string[]} theEvents
+ * @param {Iterable<string>} theEvents
  * @param {Object} theOptions - kept to remove the listener with the same options later
  * @throws {Error} when the wrapper is already registered, which can not happen as long as on() creates a new one per call
  */
@@ -89,7 +89,7 @@ const registrateHandleWrapper = (anElement, aHandle, aWrapper, theEvents, theOpt
  *
  * @param {EventTarget} aElement
  * @param {Function} aWrapper
- * @param {string[]} [theEvents] - the events to remove, all of them when omitted
+ * @param {Iterable<string>} [theEvents] - the events to remove, all of them when omitted
  */
 const removeWrapper = (aElement, aWrapper, theEvents) => {
 	const wrapperHandleMap = getWrapperHandleMap(aElement);
@@ -134,7 +134,7 @@ const toEventOptions = (options) => {
  * caller asked for. An empty entry inside an array is the opposite case: it was
  * written down and therefore throws.
  *
- * @param {string|string[]} theEvents
+ * @param {string|Iterable<string>} theEvents
  * @returns {string[]} the event types, never empty
  * @throws {Error} when no type is left or an entry is not a non empty string
  */
@@ -142,19 +142,17 @@ const toEventTypes = (theEvents) => {
 	if(theEvents == null) throw new Error("Event types are required!");	
 	
 	const events = typeof theEvents === "string" ? theEvents.trim().split(EVENTSPLITER) : theEvents;
-	if (!Array.isArray(events)) throw new Error("Invalid event types!");
+	if (typeof events[Symbol.iterator] !== "function") throw new Error("Invalid event types!");
 	if(events.length === 0) throw new Error("Event types are required!");
 
-	const result = events
-		.map((event) => {			
-			if (typeof event !== "string") throw new Error("Invalid event types!");
-			event = event.trim();
-			if (event.length === 0) throw new Error("Invalid event types!");
-			return event;
-		})
-		.map((event) => event.split(EVENTSPLITER))
-		.flat();
+	const result = [];
 
+	for (let event of events) {
+		if (typeof event !== "string") throw new Error("Invalid event types!");
+		event = event.trim();
+		if (event.length === 0) throw new Error("Invalid event types!");
+		result.push(...event.split(EVENTSPLITER));
+	}
 	return result;
 };
 
@@ -171,7 +169,7 @@ const support = Extender("EventSupport", (Prototype) => {
 	 * listener on the first event, even when the selector did not match, so the
 	 * wrapper registers itself again in that case and waits for a matching event.
 	 *
-	 * @param {string|string[]} theEvents - event types, separated by whitespaces or commas
+	 * @param {string|Iterable<string>} theEvents - event types, separated by whitespaces or commas
 	 * @param {string} [aSelector] - only call the handle when the target of the event matches
 	 * @param {Function} aHandle - called with the event
 	 * @param {boolean|Object} [theOptions] - a boolean is taken as capture, otherwise the options of addEventListener
@@ -214,7 +212,7 @@ const support = Extender("EventSupport", (Prototype) => {
 	 * A handle registered by several calls of on() is removed from all of them.
 	 *
 	 * @param {Function} aHandle - the function given to on()
-	 * @param {string|string[]} [theEvents] - the events to remove, all of them when omitted
+	 * @param {string|Iterable<string>} [theEvents] - the events to remove, all of them when omitted
 	 * @returns {EventTarget} this
 	 * @throws {Error} by invalid event types
 	 */

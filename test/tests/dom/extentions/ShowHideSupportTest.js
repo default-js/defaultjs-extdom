@@ -113,5 +113,33 @@ describe("ShowHideSupport Tests", function() {
 		container.remove();		
 	});
 	
+	it("show and hide return this", async () => {
+		const element = create("<div></div>").first();
+
+		expect(element.hide()).toBe(element);
+		expect(element.show()).toBe(element);
+	});
+
+	it("toggleShow toggles the visibility", async () => {
+		const element = create("<div></div>").first();
+
+		element.toggleShow();
+		expect(element.style.display).toBe("none");
+		element.toggleShow();
+		expect(element.style.display).toBe("");
+		element.toggleShow();
+		expect(element.style.display).toBe("none");
+	});
+
+	it("show restores the display captured on the first call", async () => {
+		const element = create("<div style=\"display:inline;\"></div>").first();
+
+		element.hide();
+		element.style.display = "flex";
+		element.hide();
+		element.show();
+		expect(element.style.display).toBe("inline");
+	});
+
 	afterAll(async () => {});
 });

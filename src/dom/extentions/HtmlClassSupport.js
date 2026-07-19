@@ -15,25 +15,25 @@ const CLASSSPLITER = /\s+/;
  * take a boolean as a class named "true".
  *
  * @param {string|string[]} theClasses
- * @returns {string[]} the class names, never empty
+ * @returns {Iterable<string>} the class names, never empty
  * @throws {Error} when no name is left or an entry is not a non empty string
  */
 const toClassNames = (theClasses) => {
 	if (theClasses == null) throw new Error("Class names are required!");
 
 	const classes = typeof theClasses === "string" ? theClasses.trim().split(CLASSSPLITER) : theClasses;
-	if (!Array.isArray(classes)) throw new Error("Invalid class names!");
+	if (typeof classes[Symbol.iterator] !== "function") throw new Error("Invalid class names!");
 	if (classes.length === 0) throw new Error("Class names are required!");
 
-	return classes
-		.map((clazz) => {
-			if (typeof clazz !== "string") throw new Error("Invalid class names!");
-			clazz = clazz.trim();
-			if (clazz.length === 0) throw new Error("Invalid class names!");
-			return clazz;
-		})
-		.map((clazz) => clazz.split(CLASSSPLITER))
-		.flat();
+	const result = [];
+	for (let clazz of classes) {
+		if (typeof clazz !== "string") throw new Error("Invalid class names!");
+		clazz = clazz.trim();
+		if (clazz.length === 0) throw new Error("Invalid class names!");
+		result.push(...clazz.split(CLASSSPLITER));
+	}
+	
+	return result;
 };
 
 /**

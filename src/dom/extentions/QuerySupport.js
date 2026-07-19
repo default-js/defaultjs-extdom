@@ -116,11 +116,23 @@ const queryExecuter = function (aElement, aSelector) {
 	return query.suffix.length > 0 ? result.find(query.suffix) : result;
 };
 
+/**
+ * Normalizes selectors to a list of non empty strings.
+ *
+ * Empty selectors are skipped rather than thrown at, other than in the sibling
+ * functions for event types and class names: an empty selector carries no intent
+ * and just contributes nothing, while a non string is a mistake and throws.
+ * Selectors are not split, comma separated lists are left for querySelectorAll.
+ *
+ * @param {string|Iterable<string>} theSelectors
+ * @returns {string[]} the trimmed selectors, empty ones removed
+ * @throws {Error} when there is no selector or one is not a string
+ */
 const toSelector = function (theSelectors) {
 	if(theSelectors == null) throw new Error("Invalid query!");
 
 	const selectors = typeof theSelectors === "string" ? [theSelectors] : Array.from(theSelectors);
-	
+
 	return selectors
 		.map((selector) => {
 				if(typeof selector !== "string") throw new Error("Invalid query!");
