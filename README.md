@@ -54,6 +54,8 @@ native prototypes, without a wrapper object.
   - [`val(value)` on a list](#valvalue-on-a-list)
   - [`NodeList.from(...)` / `HTMLCollection.from(...)`](#nodelistfrom--htmlcollectionfrom)
   - [Delegated calls](#delegated-calls)
+- [Known issues](#known-issues)
+  - [Functions shadowed by native members](#functions-shadowed-by-native-members)
 - [License](#license)
 
 ## Intro
@@ -750,6 +752,38 @@ find("div").hide();               // hides every div
 find("div").find("span");         // all spans within all divs, as one NodeList
 find("input").attr("disabled");   // Array of the attribute values
 ```
+
+## Known issues
+
+### Functions shadowed by native members
+
+Four functions are added to a prototype where a more specific type already carries a
+native member of the same name. A property is looked up from the node upwards through
+the prototype chain and the first hit wins, so the native member of the more specific
+type is found first and the function below is never reached.
+
+Node                        | Access        | What you get instead
+----------------------------|---------------|---------------------
+Text and comment nodes      | `.data`       | the text content, from `CharacterData.data`
+`<object>`                  | `.data`       | the resource url, from `HTMLObjectElement.data`
+`<template>`                | `.content`    | the fragment, from `HTMLTemplateElement.content`
+`<dialog>`                  | `.show()`     | the dialog opens, from `HTMLDialogElement.show()`
+
+Every other element is unaffected - on a `div` all of them are the functions of this
+lib.
+
+Two of these deserve attention:
+
+- `data()` is added to `Node` so it works on every kind of node, text nodes included -
+  which is exactly where it does not. The call gives back the text instead of the data
+  object, without any error.
+- `show()` on a `<dialog>` does not fail either, it does something else entirely: it
+  opens the dialog instead of restoring the display. `toggleShow()` on a dialog is
+  therefore not reliable, as the hidden state is read from the inline display only.
+
+There is no way to keep the names and fix this - the native members cannot be replaced
+without breaking what they do. Use the native members on those nodes, or keep the
+values elsewhere.
 
 ## License
 
