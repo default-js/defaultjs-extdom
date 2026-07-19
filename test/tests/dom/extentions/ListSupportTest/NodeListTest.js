@@ -174,5 +174,47 @@ describe("List Support Test - NodeList", () => {
 		expect(expected).toBe("DIVADIV");
 	});
 
+	it("applyTo calls a function with each node", () => {
+		const content = create("<div></div><a></a><div></div>");
+		const tags = [];
+
+		content.applyTo(node => tags.push(node.tagName));
+
+		expect(tags).toEqual(["DIV", "A", "DIV"]);
+	});
+
+	it("applyTo passes extra arguments to the function", () => {
+		const content = create("<div></div><div></div>");
+
+		content.applyTo((node, clazz) => node.classList.add(clazz), "class-1");
+
+		expect(content.first().classList.contains("class-1")).toBe(true);
+		expect(content.last().classList.contains("class-1")).toBe(true);
+	});
+
+	it("applyTo collects the results of a function", () => {
+		const content = create("<div></div><a></a><div></div>");
+
+		const result = content.applyTo(node => node.tagName);
+
+		expect(result).toEqual(["DIV", "A", "DIV"]);
+	});
+
+	it("applyTo calls a method by name and collects its results", () => {
+		const content = create("<div class=\"class-1\"></div><a></a><div class=\"class-1\"></div>");
+
+		const result = content.applyTo("is", ".class-1");
+
+		expect(result).toEqual([true, false, true]);
+	});
+
+	it("applyTo skips null results", () => {
+		const content = create("<div></div><a></a><div></div>");
+
+		const result = content.applyTo(node => node.tagName === "A" ? node.tagName : null);
+
+		expect(result).toEqual(["A"]);
+	});
+
 	afterAll(() => {});
 });

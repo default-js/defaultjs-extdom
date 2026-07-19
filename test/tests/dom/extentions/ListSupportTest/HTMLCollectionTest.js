@@ -136,5 +136,22 @@ describe("List Support Test - HTMLCollection", () => {
 		expect(content.reduce((result, node) => result + node.tagName, "")).toBe("DIVADIV");
 	});
 
+	it("applyTo calls a function with each node", () => {
+		const content = create("<div></div><a></a><div></div>", true).content.children;
+		const tags = [];
+
+		content.applyTo(node => tags.push(node.tagName));
+
+		expect(tags).toEqual(["DIV", "A", "DIV"]);
+	});
+
+	it("applyTo calls a method by name and collects its results", () => {
+		const content = create("<div class=\"class-1\"></div><a></a><div class=\"class-1\"></div>", true).content.children;
+
+		const result = content.applyTo("is", ".class-1");
+
+		expect(result).toEqual([true, false, true]);
+	});
+
 	afterAll(() => {});
 });

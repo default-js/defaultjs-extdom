@@ -115,13 +115,24 @@ describe("ValueSupport Tests", function() {
 	it("val set value to textarea", function(done){
 		let element = find("#value-support-test-6 textarea").first();
 		expect(element.val()).toBe("textarea");
-		
+
 		let expected = Utils.uuid();
 		element.val(expected);
 		expect(element.val()).toBe(expected);
-		
+
 		done();
-	});	
+	});
+
+	it("val set value to textarea triggers an input event", function(done){
+		let element = create("<textarea>textarea</textarea>").first();
+
+		element.on("input", () => {
+			expect(element.val()).toBe("changed");
+			done();
+		});
+
+		element.val("changed");
+	});
 	
 	it("val all values including falsy ones", function(done){
 		let elements = find("#value-support-test-7 > *");
