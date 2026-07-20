@@ -1,14 +1,12 @@
+/**
+ * Adds val() to HTMLTextAreaElement.
+ *
+ * A textarea matches none of the special input types, so ValueSupport falls back
+ * to reading and writing its value - and triggers an input event when it is set,
+ * the same as any other field.
+ */
 import extendPrototype from "../utils/ExtendPrototype";
-import Extender from "../utils/Extender";
+import ValueSupport from "./extentions/ValueSupport";
 
 
-extendPrototype(HTMLTextAreaElement,Extender("ValueSupport", Prototype => {	
-	Prototype.val = function() {
-		if(arguments.length == 0)
-			return this.value;
-		else
-			this.value = arguments[0]
-			
-		return this;
-	};	
-}));
+extendPrototype(HTMLTextAreaElement, ValueSupport);

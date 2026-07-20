@@ -3,4 +3,5 @@ import "./PrependTest.js";
 import "./OtherTest.js";
 import "./ReplaceTest.js";
 import "./AfterTest.js";
-import "./BeforeTest.js"; 
+import "./BeforeTest.js";
+import "./HtmlTest.js";

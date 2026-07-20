@@ -115,14 +115,66 @@ describe("ValueSupport Tests", function() {
 	it("val set value to textarea", function(done){
 		let element = find("#value-support-test-6 textarea").first();
 		expect(element.val()).toBe("textarea");
-		
+
 		let expected = Utils.uuid();
 		element.val(expected);
 		expect(element.val()).toBe(expected);
-		
+
 		done();
-	});	
+	});
+
+	it("val set value to textarea triggers an input event", function(done){
+		let element = create("<textarea>textarea</textarea>").first();
+
+		element.on("input", () => {
+			expect(element.val()).toBe("changed");
+			done();
+		});
+
+		element.val("changed");
+	});
 	
+	it("val all values including falsy ones", function(done){
+		let elements = find("#value-support-test-7 > *");
+		expect(elements).toBeDefined();
+		expect(elements.length).toBe(4);
+		let values = elements.val();
+
+		expect(values).toBeDefined();
+		expect(values.size).toBe(2);
+
+		expect(values.has("empty-text")).toBe(true);
+		expect(values.get("empty-text")).toBe("");
+
+		expect(values.has("unchecked-box")).toBe(true);
+		expect(values.get("unchecked-box")).toBe(false);
+
+		done();
+	});
+
+	it("val of a radio group without a selection", function(done){
+		let elements = find("#value-support-test-7 [name=\"radio-4\"]");
+		expect(elements.length).toBe(2);
+
+		elements.forEach(element => expect(element.val()).toBeUndefined());
+		expect(elements.val().has("radio-4")).toBe(false);
+
+		done();
+	});
+
+	it("val of a radio group keeps the selected value", function(done){
+		let elements = find("#value-support-test-4 [name=\"radio-3\"]");
+		expect(elements.length).toBe(3);
+
+		elements.val("radio-3-1");
+		expect(elements.val().get("radio-3")).toBe("radio-3-1");
+
+		elements.val("radio-3-3");
+		expect(elements.val().get("radio-3")).toBe("radio-3-3");
+
+		done();
+	});
+
 	afterAll(function(done){
 		window.document.body.innerHTML = "";
 		done();

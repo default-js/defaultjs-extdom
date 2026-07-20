@@ -30,6 +30,28 @@ describe("QuerySupport Tests", function() {
 		done();
 	});
 	
+	it("parent(selector) returns null when nothing matches", function(){
+		const content = create("<div><div><span></span></div></div>").first();
+		const span = content.find("span").first();
+
+		expect(span.parent(".not-there")).toBe(null);
+	});
+
+	it("parent(selector) throws by an invalid selector", function(){
+		const content = create("<div><div><span></span></div></div>").first();
+		const span = content.find("span").first();
+
+		expect(() => span.parent("div(")).toThrow();
+		expect(() => span.parent(".a:not(")).toThrow();
+	});
+
+	it("parents(selector) throws by an invalid selector", function(){
+		const content = create("<div><div><span></span></div></div>").first();
+		const span = content.find("span").first();
+
+		expect(() => span.parents("div(")).toThrow();
+	});
+
 	afterAll(function(done){
 		window.document.body.innerHTML = "";
 		done();

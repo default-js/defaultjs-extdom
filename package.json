@@ -1,9 +1,11 @@
 {
 	"name": "@default-js/defaultjs-extdom",
 	"buildname": "defaultjs-extdom",
-	"version": "1.1.7",
+	"version": "2.0.0",
 	"description": "Extending the nativ browser dom api. It allows you to use the dom api in a fluit api way and makes it lot easier to use the dom api for complex solutions",
-	"main": "js/index.js",
+	"main": "index.js",
+	"module": "index.js",
+	"types": "index.d.ts",
 	"scripts": {
 		"build:dev": "webpack --mode=development --progress",
 		"build:prod": "webpack --mode=production --progress",
@@ -50,6 +52,8 @@
 	"dependencies": {},
 	"files": [
 		"index.js",
+		"index.d.ts",
+		"CHANGELOG.md",
 		"src/**",
 		"dist/**",
 		"LICENSE",

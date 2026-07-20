@@ -62,6 +62,53 @@ describe("AttributeSupport Tests", function() {
 		done();
 	});	
 	
+	it("set attr to 0", function(done){
+		let element = find("#id-2").first();
+		let key = Utils.domId();
+		element.attr(key , 0);
+		expect(element.attr(key)).toBe("0");
+		expect(element).toBe(find("[" + key + "]").first());
+		done();
+	});
+
+	it("set attr to false", function(done){
+		let element = find("#id-2").first();
+		let key = Utils.domId();
+		element.attr(key , false);
+		expect(element.attr(key)).toBe("false");
+		expect(element).toBe(find("[" + key + "]").first());
+		done();
+	});
+
+	it("set attr to an empty string", function(done){
+		let element = find("#id-2").first();
+		let key = Utils.domId();
+		element.attr(key , "");
+		expect(element.attr(key)).toBe("");
+		expect(element).toBe(find("[" + key + "]").first());
+		done();
+	});
+
+	it("get empty attribute values over a nodelist", function(done){
+		let elements = find("#id-4 span");
+		expect(elements.length).toBe(2);
+
+		let values = elements.attr("data-test-1");
+		expect(values).toBeDefined();
+		expect(values).toEqual(["", ""]);
+		done();
+	});
+
+	it("get empty attribute values over a htmlcollection", function(done){
+		let elements = find("#id-4").first().children;
+		expect(elements.length).toBe(2);
+
+		let values = elements.attr("data-test-1");
+		expect(values).toBeDefined();
+		expect(values).toEqual(["", ""]);
+		done();
+	});
+
 	afterAll(function(done){
 		window.document.body.innerHTML = "";
 		done();
