@@ -107,7 +107,26 @@ describe("ManipulationSupportTest Basic", function() {
 		done(); 
 	});
 	
-	it("function: content", function(done){		
+	it("function: empty with select", function(done){
+		let id = Utils.domId();
+		let container = window.create("<div><select id=\"" + id + "\"><option>option-1</option><option>option-2</option></select></div>").first();
+		document.body.append(container);
+		let select = find("#" + id).first();
+		expect(select instanceof HTMLSelectElement).toBe(true);
+		expect(select.parentNode).toBe(container);
+
+		container.empty();
+		expect(container.childNodes.length).toBe(0);
+		expect(find("#" + id).length).toBe(0);
+		expect(select.parentNode).toBeNull();
+		expect(select.isConnected).toBe(false);
+		expect(select.options.length).toBe(2);
+
+		container.remove();
+		done();
+	});
+
+	it("function: content", function(done){
 		expect(document.body.childNodes).toBe(document.body.content());
 		done();
 	});

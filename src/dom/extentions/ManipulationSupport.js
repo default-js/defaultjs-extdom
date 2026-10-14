@@ -41,13 +41,15 @@ const support = Extender("ManipulationSupport", Prototype => {
 	/**
 	 * Removes all child nodes.
 	 *
+	 * Uses removeChild instead of calling remove() on each child, because
+	 * HTMLSelectElement overloads remove(index) to remove an option.
+	 *
 	 * @returns {Node} this
 	 */
 	Prototype.empty = function(){
-		const nodes = this.childNodes;
-		while(nodes.length != 0)			
-			nodes[0].remove(true);
-		
+		while(this.firstChild)
+			this.removeChild(this.firstChild);
+
 		return this;
 	};
 	
