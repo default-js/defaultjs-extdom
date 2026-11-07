@@ -23,18 +23,21 @@ import Extender from "../../utils/Extender";
  * @throws {Error} when there is no content at all or an item is not content
  */
 const toNodes = function () {
-	const content = Array.from(arguments).flat(Infinity);
+	const content = Array.from(arguments);
 	if (content.length === 0) throw new Error("Content is required!");
 
 	return content
+		.filter((item) => item != null)
 		.map((item) => {
-			if (item instanceof Node) return item;
-			if (item instanceof NodeList || item instanceof HTMLCollection) return Array.from(item);
-			if (typeof item === "string") return Array.from(create(item));
+			if (item instanceof Array) return toNodes(...item);
+			else if (item instanceof Node) return item;
+			else if (item instanceof NodeList || item instanceof HTMLCollection) return Array.from(item);
+			else if (typeof item === "string") return Array.from(create(item));
+			else if (typeof item[Symbol.iterator] !== "undefined") return toNodes(...item);
 
 			throw new Error("Invalid content!");
 		})
-		.flat();
+		.flat(Number.infinity);
 };
 
 const support = Extender("ManipulationSupport", Prototype => {
@@ -78,7 +81,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 			else
 				return this.innerHTML;
 		else {
-			const nodes = toNodes(Array.from(arguments));
+			const nodes = toNodes(arguments);
 			this.empty();
 			nodes.forEach(node => this.appendChild(node));
 		}
@@ -94,7 +97,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 	 * @throws {Error} by invalid content
 	 */
 	Prototype.append = function(){
-		toNodes(Array.from(arguments)).forEach(node => this.appendChild(node));
+		toNodes(arguments).forEach(node => this.appendChild(node));
 
 		return this;
 	};
@@ -107,7 +110,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 	 * @throws {Error} by invalid content
 	 */
 	Prototype.prepend = function(){
-		const nodes = toNodes(Array.from(arguments));
+		const nodes = toNodes(arguments);
 		const first = this.firstChild;
 		nodes.forEach(node => this.insertBefore(node, first));
 
@@ -152,7 +155,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 
 		const parent = this.parentNode;
 		const next = this.nextSibling;
-		toNodes(Array.from(arguments)).forEach(node => parent.insertBefore(node, next));
+		toNodes(arguments).forEach(node => parent.insertBefore(node, next));
 
 		return this;
 	};
@@ -169,7 +172,7 @@ const support = Extender("ManipulationSupport", Prototype => {
 			throw new Error("Can't insert nodes before this node! Parent node not available!");
 
 		const parent = this.parentNode;
-		toNodes(Array.from(arguments)).forEach(node => parent.insertBefore(node, this));
+		toNodes(arguments).forEach(node => parent.insertBefore(node, this));
 
 		return this;
 	};

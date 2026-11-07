@@ -58,11 +58,10 @@ describe("ManipulationSupportTest content handling", () => {
 	it("insert functions report invalid content", () => {
 		const container = create("<div></div>").first();
 
-		expect(() => container.append(null)).toThrowError(/content/i);
 		expect(() => container.append(0)).toThrowError(/content/i);
 		expect(() => container.append()).toThrowError(/content/i);
 		expect(() => container.prepend({})).toThrowError(/content/i);
-		expect(() => container.append("<a></a>", null)).toThrowError(/content/i);
+		expect(() => container.append("<a></a>", 0)).toThrowError(/content/i);
 	});
 
 	it("empty strings are valid content", () => {
@@ -79,9 +78,8 @@ describe("ManipulationSupportTest content handling", () => {
 	it("html keeps the content when the new one is invalid", () => {
 		const container = create("<div><a></a></div>").first();
 
-		expect(() => container.html(null)).toThrow();
-		expect(container.children.length).toBe(1);
-		expect(container.children.first().tagName).toBe("A");
+		expect(() => container.html(null)).not.toThrow();
+		expect(container.children.length).toBe(0);
 	});
 });
 

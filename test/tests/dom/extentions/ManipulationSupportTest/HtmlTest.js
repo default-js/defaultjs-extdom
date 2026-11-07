@@ -86,9 +86,9 @@ describe("ManipulationSupportTest html", () => {
 		expect(container.html("<div>test-1</div>")).toBe(container);
 	});
 
-	it("set html by null throws an error", () => {
+	it("set html by null does not throw an error", () => {
 		const container = create("<div><span>test</span></div>").first();
 
-		expect(() => container.html(null)).toThrow();
+		expect(() => container.html(null)).not.toThrow();
 	});
 });

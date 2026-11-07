@@ -10,4 +10,19 @@ export const uuid = function() {
 export const domId = function() {
 	return "dom-id-" + uuid();
 };
-export default { uuid, domId };
+
+/**
+ * Creates a detached div containing the text.
+ */
+export const div = function(aText) {
+	return create("<div>" + aText + "</div>").first();
+};
+
+/**
+ * Lists the text content of all child nodes, in order.
+ */
+export const texts = function(aNode) {
+	return Array.from(aNode.childNodes, (child) => child.textContent);
+};
+
+export default { uuid, domId, div, texts };
